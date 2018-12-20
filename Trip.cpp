@@ -11,7 +11,6 @@ Trip::Trip(const Trip &trip) {
     routeId = trip.routeId;
     distance = trip.distance;
     benefit = trip.benefit;
-
     initialNode = trip.initialNode;
     finalNode = trip.finalNode;
 }

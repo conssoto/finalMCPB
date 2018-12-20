@@ -1,6 +1,6 @@
 #include "Solution.h"
 
-Solution::Solution(ProblemInstance *problemInstance){
+Solution::Solution(ProblemInstance *problemInstance, vector<bool> parameters){
     for(int i = 0; i < problemInstance->getNumberOfQualities(); ++i){
         this->recollected.push_back(0);
     }
@@ -26,6 +26,7 @@ Solution::Solution(ProblemInstance *problemInstance){
     this->plant = new Node(0, 0, 0);
     this->literCost = {0.03, 0.021, 0.009};
     this->kilometerCost = 1;
+    this->parameters = parameters;
 }
 
 Solution::~Solution() {
@@ -53,11 +54,14 @@ Solution::~Solution() {
 
     this->problemInstance = nullptr;
 
-    delete (this->plant);
-    this->plant = nullptr;
+//    delete (this->plant);
+//    this->plant = nullptr;
 
     this->literCost.clear();
     this->literCost.shrink_to_fit();
+
+    this->parameters.clear();
+    this->parameters.shrink_to_fit();
 }
 
 Solution::Solution(const Solution &s2){
@@ -78,7 +82,7 @@ Solution::Solution(const Solution &s2){
     nodesXQuality = s2.nodesXQuality;
 
     for (Route *route: s2.routes){
-        Route *copy = new Route(*route);
+        auto *copy = new Route(*route);
         routes.push_back(copy);
     }
 
@@ -239,6 +243,14 @@ Truck *Solution::getNextTruck() {
     return *max_element(this->unusedTrucks.begin(), this->unusedTrucks.end());
 }
 
+void Solution::deleteRoutes(){
+    for (Route *route:this->routes) {
+        delete route;
+    }
+    this->routes.clear();
+    this->routes.shrink_to_fit();
+}
+
 void Solution::removeTruck(Truck *truck) {
     auto it = find(this->unusedTrucks.begin(), this->unusedTrucks.end(), truck);
     long index = std::distance(this->unusedTrucks.begin(), it);
@@ -352,7 +364,7 @@ void Solution::updateSolution(Node *node, bool add) {
     resetDemands();
 }
 
-void Solution::updateSolutionAndRoute(Trip *trip, Route *currentRoute, bool repairing) {
+void Solution::stepUpdateSolution(Trip *trip, Route *currentRoute, bool repairing) {
     currentRoute->distance += trip->distance;
     if (trip->finalNode != this->plant ) {
         int tripProduction(trip->finalNode->getProduction());

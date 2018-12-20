@@ -25,13 +25,14 @@ public:
     Node * plant;
     vector<double> literCost;
     double kilometerCost;
+    vector<bool> parameters;
 
 public:
-    explicit Solution(ProblemInstance *problemInstance);
+    explicit Solution(ProblemInstance *problemInstance, vector<bool> parameters);
     ~Solution();
     Solution(const Solution &s2);
 
-    void updateSolutionAndRoute(Trip *trip, Route *route, bool repairing);
+    void stepUpdateSolution(Trip *trip, Route *route, bool repairing);
     void updateSolution(Node *node, bool add);
     void resetSolution(const Solution &s2);
     void updateDemands(int currentTypeIndex, Node *currentNode, Route *currentRoute, int production, bool repairing);
@@ -61,6 +62,7 @@ public:
     void removeTruck(Truck *truck);
     void removeNode(Node *node);
     void removeTrip(int tripIndex, Route *route, Solution *solution);
+    void deleteRoutes();
 
     double calculateBenefit(Trip *trip, int typeIndex);
 

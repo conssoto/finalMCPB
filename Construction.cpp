@@ -20,7 +20,6 @@ void Construction::deleteNeighborhood(){
     this->neighborhood.shrink_to_fit();
 }
 
-//TODO que parta en p[lanta y vaya a cualquier nodo del tipo que corresponde. -> current Node es la planta ??
 vector<Trip *> Construction::getOptions(Solution *solution, int currentType, Node *currentNode, bool resize) {
     vector<Trip *> options;
     for (int i = 0; i < solution->nodesXQuality[currentType - 1]; ++i) {
@@ -64,7 +63,7 @@ void Construction::setNeighborhood(Solution *solution, bool repairing) {
         if (this->currentNode == solution->plant && !this->currentRoute->trips.empty()) {
             solution->addRoute(this->currentType);
             this->currentRoute = solution->routes.back();
-            options = getOptions(solution, this->currentType, this->currentNode, false);
+            options = getOptions(solution, this->currentType, this->currentNode, solution->parameters[0]);
         }
         else{
             options = getOptions(solution, this->currentType, this->currentNode, true);
@@ -95,7 +94,7 @@ Trip *Construction::roulette() {
         if (beta > stoi(to_string(choiceProbability))) {
             choiceProbability += trip->finalNode->getProduction() * 100.0 / this->totalProduction;
         }
-        if ((beta <= stoi(to_string(choiceProbability))) or (stoi(to_string(choiceProbability)))) { //TODO eliminar los trips no hacerlo aca, hacerlo cuando termine la iteracion
+        if ((beta <= stoi(to_string(choiceProbability))) or (stoi(to_string(choiceProbability))==100)) { //TODO eliminar los trips no hacerlo aca, hacerlo cuando termine la iteracion
             auto *selectedTrip = new Trip(*trip);
             deleteNeighborhood();
             return selectedTrip;
@@ -114,29 +113,28 @@ void Construction::updateIds(vector<Route *> routes){ // TODO para que se usan?
 
 void Construction::feasibleSolution(Solution *solution) {
     /// Fase 1: agregar nodo favoreciendo producion dentro de los mas cercanos.
-    cout << endl << "----FASE 1----" << endl;
+//    cout << endl << "----FASE 1----" << endl;
     while (solution->getUnsatisfiedType() != -1) {
         setNeighborhood(solution, false);
         Trip *selectedTrip = roulette();
         solution->addTrip(selectedTrip, this->currentRoute);
-        solution->updateSolutionAndRoute(selectedTrip, this->currentRoute, false);
+        solution->stepUpdateSolution(selectedTrip, this->currentRoute, false);
 
         if (solution->unusedTrucks.empty() && !solution->routes.back()->trips.empty() &&
             solution->routes.back()->trips.back()->finalNode == solution->plant) {
             break; // iniciar fase 2
         }
     }
-    solution->printAll();
+//    solution->printAll();
 
     /// Fase 2: reparacion, agregar nodos a los camiones con espacio.
-    cout << endl <<  " -----FASE 2-----" << endl;
+//    cout << endl <<  " -----FASE 2-----" << endl;
     while (solution->getUnsatisfiedType() != -1) {
         setNeighborhood(solution, true);
         Trip *selectedTrip = roulette();
         solution->addTrip(selectedTrip, this->currentRoute);
-        solution->updateSolutionAndRoute(selectedTrip, this->currentRoute, true);
+        solution->stepUpdateSolution(selectedTrip, this->currentRoute, true);
     }
     this->updateIds(solution->routes);
-
 //    solution->printAll();
 }

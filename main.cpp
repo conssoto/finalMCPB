@@ -5,6 +5,7 @@
 #include "Construction.h"
 
 size_t NEIGHBORHOOD = 5;
+vector<bool> PARAMETERS = {true}; // {cut Neighborhood}
 
 int main() {
 //    cout << "Enter instance number: ";
@@ -13,27 +14,48 @@ int main() {
 
     Reader r("2");
     srand(3);
+
     ProblemInstance *problemInstance;
 
     problemInstance = r.readInputFile();
-    problemInstance->printAll();
+//    problemInstance->printAll();
 
-    auto *currentSolution = new Solution(problemInstance);
+    auto *bestSolution = new Solution(problemInstance, PARAMETERS);
+    auto *lastSolution = new Solution(problemInstance, PARAMETERS);
 
-    auto *construction = new Construction(NEIGHBORHOOD, currentSolution);
 
-    construction->feasibleSolution(currentSolution);
-//    currentSolution->printAll();
-    double aux(0);
-    for (Route *r:currentSolution->routes){
-        for(Trip *t: r->trips){
-            aux += t->benefit;
+    int better(0);
+    for (int j =0 ; j <10 ; ++j){
+
+
+
+        auto *currentSolution = new Solution(problemInstance, PARAMETERS);
+        auto *construction = new Construction(NEIGHBORHOOD, currentSolution);
+
+        construction->feasibleSolution(currentSolution);
+
+        cout<<  "last" << lastSolution->getTotalBenefit();
+        cout <<  "\tcurrent" << currentSolution->getTotalBenefit();
+        cout <<  "\tbest" << bestSolution->getTotalBenefit()<< endl;
+
+        if (currentSolution->getTotalBenefit() > bestSolution->getTotalBenefit()){
+            bestSolution->resetSolution(*currentSolution);
+            cout << "new best " << bestSolution->getTotalBenefit() << endl;
+            better++;
         }
+        else{
+            cout << "No ben " << currentSolution->getTotalBenefit() << endl;
+        }
+        lastSolution->resetSolution(*currentSolution);
+        delete currentSolution;
     }
-    cout << "ben" << aux;
+
+//    currentSolution->printAll();
+
+    cout << "ben " << bestSolution->getTotalBenefit() << " better " << better << endl;
+    bestSolution->printAll();
 
 
-    delete currentSolution;
     delete problemInstance;
 
     return 0;

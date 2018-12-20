@@ -22,7 +22,7 @@ Route::Route(const Route &route){
     distance = route.distance;
 
     for(Trip* trip: route.trips){
-        Trip *copy = new Trip(*trip);
+        auto *copy = new Trip(*trip);
         trips.push_back(copy);
     }
 
