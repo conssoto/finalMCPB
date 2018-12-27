@@ -1,14 +1,30 @@
-//
-// Created by Constanza Soto on 20-12-18.
-//
+#pragma once
+#include <iostream>
+#include <vector>
+#include <random>
+#include "Trip.h"
+#include "ProblemInstance.h"
+#include "Route.h"
+#include "Solution.h"
 
-#ifndef FINALMCPB_REORDERNODES_H
-#define FINALMCPB_REORDERNODES_H
-
+using namespace std;
 
 class ReorderNodes {
+public:
+    double bestDistance;
+    int bestIndex;
+    Node *node;
 
+
+public:
+    ReorderNodes();
+    ~ReorderNodes();
+
+    void removeTrip(int tripIndex, Route *route, Solution *solution);
+
+    void setBest(Route *route, ProblemInstance *problemInstance);
+
+    void movement(Solution *solution);
+
+    void printRoute(Route *route);
 };
-
-
-#endif //FINALMCPB_REORDERNODES_H

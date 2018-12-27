@@ -174,6 +174,45 @@ CMakeFiles/finalMCPB.dir/Construction.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/finalMCPB.dir/Construction.cpp.s"
 	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/constanzasoto/TT1-TT2/finalMCPB/Construction.cpp -o CMakeFiles/finalMCPB.dir/Construction.cpp.s
 
+CMakeFiles/finalMCPB.dir/ReorderNodes.cpp.o: CMakeFiles/finalMCPB.dir/flags.make
+CMakeFiles/finalMCPB.dir/ReorderNodes.cpp.o: ../ReorderNodes.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/constanzasoto/TT1-TT2/finalMCPB/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/finalMCPB.dir/ReorderNodes.cpp.o"
+	/Library/Developer/CommandLineTools/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/finalMCPB.dir/ReorderNodes.cpp.o -c /Users/constanzasoto/TT1-TT2/finalMCPB/ReorderNodes.cpp
+
+CMakeFiles/finalMCPB.dir/ReorderNodes.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/finalMCPB.dir/ReorderNodes.cpp.i"
+	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/constanzasoto/TT1-TT2/finalMCPB/ReorderNodes.cpp > CMakeFiles/finalMCPB.dir/ReorderNodes.cpp.i
+
+CMakeFiles/finalMCPB.dir/ReorderNodes.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/finalMCPB.dir/ReorderNodes.cpp.s"
+	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/constanzasoto/TT1-TT2/finalMCPB/ReorderNodes.cpp -o CMakeFiles/finalMCPB.dir/ReorderNodes.cpp.s
+
+CMakeFiles/finalMCPB.dir/RemoveNodes.cpp.o: CMakeFiles/finalMCPB.dir/flags.make
+CMakeFiles/finalMCPB.dir/RemoveNodes.cpp.o: ../RemoveNodes.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/constanzasoto/TT1-TT2/finalMCPB/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object CMakeFiles/finalMCPB.dir/RemoveNodes.cpp.o"
+	/Library/Developer/CommandLineTools/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/finalMCPB.dir/RemoveNodes.cpp.o -c /Users/constanzasoto/TT1-TT2/finalMCPB/RemoveNodes.cpp
+
+CMakeFiles/finalMCPB.dir/RemoveNodes.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/finalMCPB.dir/RemoveNodes.cpp.i"
+	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/constanzasoto/TT1-TT2/finalMCPB/RemoveNodes.cpp > CMakeFiles/finalMCPB.dir/RemoveNodes.cpp.i
+
+CMakeFiles/finalMCPB.dir/RemoveNodes.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/finalMCPB.dir/RemoveNodes.cpp.s"
+	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/constanzasoto/TT1-TT2/finalMCPB/RemoveNodes.cpp -o CMakeFiles/finalMCPB.dir/RemoveNodes.cpp.s
+
+CMakeFiles/finalMCPB.dir/AddNodes.cpp.o: CMakeFiles/finalMCPB.dir/flags.make
+CMakeFiles/finalMCPB.dir/AddNodes.cpp.o: ../AddNodes.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/constanzasoto/TT1-TT2/finalMCPB/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object CMakeFiles/finalMCPB.dir/AddNodes.cpp.o"
+	/Library/Developer/CommandLineTools/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/finalMCPB.dir/AddNodes.cpp.o -c /Users/constanzasoto/TT1-TT2/finalMCPB/AddNodes.cpp
+
+CMakeFiles/finalMCPB.dir/AddNodes.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/finalMCPB.dir/AddNodes.cpp.i"
+	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/constanzasoto/TT1-TT2/finalMCPB/AddNodes.cpp > CMakeFiles/finalMCPB.dir/AddNodes.cpp.i
+
+CMakeFiles/finalMCPB.dir/AddNodes.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/finalMCPB.dir/AddNodes.cpp.s"
+	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/constanzasoto/TT1-TT2/finalMCPB/AddNodes.cpp -o CMakeFiles/finalMCPB.dir/AddNodes.cpp.s
+
 # Object files for target finalMCPB
 finalMCPB_OBJECTS = \
 "CMakeFiles/finalMCPB.dir/main.cpp.o" \
@@ -184,7 +223,10 @@ finalMCPB_OBJECTS = \
 "CMakeFiles/finalMCPB.dir/Trip.cpp.o" \
 "CMakeFiles/finalMCPB.dir/Route.cpp.o" \
 "CMakeFiles/finalMCPB.dir/Solution.cpp.o" \
-"CMakeFiles/finalMCPB.dir/Construction.cpp.o"
+"CMakeFiles/finalMCPB.dir/Construction.cpp.o" \
+"CMakeFiles/finalMCPB.dir/ReorderNodes.cpp.o" \
+"CMakeFiles/finalMCPB.dir/RemoveNodes.cpp.o" \
+"CMakeFiles/finalMCPB.dir/AddNodes.cpp.o"
 
 # External object files for target finalMCPB
 finalMCPB_EXTERNAL_OBJECTS =
@@ -198,9 +240,12 @@ finalMCPB: CMakeFiles/finalMCPB.dir/Trip.cpp.o
 finalMCPB: CMakeFiles/finalMCPB.dir/Route.cpp.o
 finalMCPB: CMakeFiles/finalMCPB.dir/Solution.cpp.o
 finalMCPB: CMakeFiles/finalMCPB.dir/Construction.cpp.o
+finalMCPB: CMakeFiles/finalMCPB.dir/ReorderNodes.cpp.o
+finalMCPB: CMakeFiles/finalMCPB.dir/RemoveNodes.cpp.o
+finalMCPB: CMakeFiles/finalMCPB.dir/AddNodes.cpp.o
 finalMCPB: CMakeFiles/finalMCPB.dir/build.make
 finalMCPB: CMakeFiles/finalMCPB.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/Users/constanzasoto/TT1-TT2/finalMCPB/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Linking CXX executable finalMCPB"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/Users/constanzasoto/TT1-TT2/finalMCPB/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Linking CXX executable finalMCPB"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/finalMCPB.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

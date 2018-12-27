@@ -12,16 +12,31 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="bd56ff8e-4ae7-4166-b3fc-64c343839fae" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/AddNodes.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/AddNodes.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/RemoveNodes.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/RemoveNodes.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Construction.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Construction.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Construction.h" beforeDir="false" afterPath="$PROJECT_DIR$/Construction.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Construction.o" beforeDir="false" afterPath="$PROJECT_DIR$/Construction.o" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MCPB" beforeDir="false" afterPath="$PROJECT_DIR$/MCPB" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Route.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Route.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/Makefile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ReorderNodes.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/ReorderNodes.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ReorderNodes.h" beforeDir="false" afterPath="$PROJECT_DIR$/ReorderNodes.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Solution.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Solution.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Solution.h" beforeDir="false" afterPath="$PROJECT_DIR$/Solution.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Solution.o" beforeDir="false" afterPath="$PROJECT_DIR$/Solution.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Trip.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Trip.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Makefile2" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Makefile2" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/finalMCPB.dir/DependInfo.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/finalMCPB.dir/DependInfo.cmake" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/finalMCPB.dir/build.make" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/finalMCPB.dir/build.make" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/finalMCPB.dir/cmake_clean.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/finalMCPB.dir/cmake_clean.cmake" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/finalMCPB.dir/link.txt" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/finalMCPB.dir/link.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/finalMCPB.dir/progress.make" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/finalMCPB.dir/progress.make" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/progress.marks" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/progress.marks" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/Makefile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/finalMCPB.cbp" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/finalMCPB.cbp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/main.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.o" beforeDir="false" afterPath="$PROJECT_DIR$/main.o" afterDir="false" />
     </list>
@@ -43,42 +58,42 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
-          <entry key="Makefile" value="2" />
-          <entry key="cpp" value="16" />
-          <entry key="h" value="17" />
+          <entry key="Makefile" value="3" />
+          <entry key="cpp" value="21" />
+          <entry key="h" value="25" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="ObjectiveC" value="33" />
-          <entry key="PLAIN_TEXT" value="2" />
+          <entry key="ObjectiveC" value="46" />
+          <entry key="PLAIN_TEXT" value="3" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="Makefile" value="54" />
-          <entry key="cpp" value="6950" />
-          <entry key="h" value="297" />
+          <entry key="Makefile" value="97" />
+          <entry key="cpp" value="12702" />
+          <entry key="h" value="367" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="Doxygen file" value="2" />
-          <entry key="ObjectiveC" value="7245" />
-          <entry key="PLAIN_TEXT" value="54" />
+          <entry key="ObjectiveC" value="13067" />
+          <entry key="PLAIN_TEXT" value="97" />
         </counts>
       </usages-collector>
     </session>
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.54801226">
+    <splitter split-orientation="horizontal" split-proportion="0.62691134">
       <split-first>
         <leaf>
-          <file pinned="false" current-in-tab="true">
+          <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/main.cpp">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="818">
-                  <caret line="55" column="29" selection-start-line="55" selection-start-column="29" selection-end-line="55" selection-end-column="29" />
+                <state relative-caret-position="91">
+                  <caret line="17" selection-start-line="17" selection-end-line="17" />
                   <folding>
                     <element signature="e#0#19#0" expanded="true" />
                   </folding>
@@ -86,11 +101,38 @@
               </provider>
             </entry>
           </file>
+          <file pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/ReorderNodes.cpp">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="276">
+                  <caret line="30" column="22" selection-start-line="30" selection-start-column="22" selection-end-line="30" selection-end-column="22" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/RemoveNodes.cpp">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="-352">
+                  <caret line="59" column="79" selection-start-line="59" selection-start-column="44" selection-end-line="59" selection-end-column="79" />
+                </state>
+              </provider>
+            </entry>
+          </file>
           <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/Construction.cpp">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="276">
-                  <caret line="135" column="38" lean-forward="true" selection-start-line="135" selection-start-column="38" selection-end-line="135" selection-end-column="38" />
+                <state relative-caret-position="181">
+                  <caret line="132" selection-start-line="132" selection-end-line="132" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/AddNodes.cpp">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="-1694">
+                  <caret line="32" column="15" selection-start-line="32" selection-start-column="15" selection-end-line="32" selection-end-column="15" />
                 </state>
               </provider>
             </entry>
@@ -98,17 +140,8 @@
           <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/Solution.cpp">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="855">
-                  <caret line="57" column="5" lean-forward="true" selection-start-line="56" selection-start-column="5" selection-end-line="57" selection-end-column="5" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/ProblemInstance.cpp">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="440">
-                  <caret line="62" column="41" selection-start-line="62" selection-start-column="41" selection-end-line="62" selection-end-column="41" />
+                <state relative-caret-position="-5275">
+                  <caret line="35" lean-forward="true" selection-start-line="35" selection-end-line="35" />
                 </state>
               </provider>
             </entry>
@@ -116,8 +149,8 @@
           <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/Trip.cpp">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="180">
-                  <caret line="12" column="27" selection-start-line="12" selection-start-column="27" selection-end-line="12" selection-end-column="27" />
+                <state relative-caret-position="205">
+                  <caret line="17" column="11" selection-start-line="17" selection-start-column="11" selection-end-line="17" selection-end-column="11" />
                 </state>
               </provider>
             </entry>
@@ -125,17 +158,8 @@
           <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/Route.cpp">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="347">
-                  <caret line="24" column="27" selection-start-line="24" selection-start-column="27" selection-end-line="24" selection-end-column="27" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/Reader.cpp">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="60">
-                  <caret line="4" column="15" selection-start-line="4" selection-start-column="9" selection-end-line="4" selection-end-column="15" />
+                <state relative-caret-position="-15">
+                  <caret line="21" column="12" selection-start-line="21" selection-start-column="4" selection-end-line="21" selection-end-column="12" />
                 </state>
               </provider>
             </entry>
@@ -145,22 +169,10 @@
       <split-second>
         <leaf>
           <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/Reader.h">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="255">
-                  <caret line="17" column="7" selection-start-line="17" selection-start-column="7" selection-end-line="17" selection-end-column="7" />
-                  <folding>
-                    <element signature="e#13#32#0" expanded="true" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/ProblemInstance.h">
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="435">
-                  <caret line="29" column="19" selection-start-line="29" selection-start-column="8" selection-end-line="29" selection-end-column="19" />
+                  <caret line="29" column="13" lean-forward="true" selection-start-line="29" selection-start-column="13" selection-end-line="29" selection-end-column="13" />
                   <folding>
                     <element signature="e#13#32#0" expanded="true" />
                   </folding>
@@ -169,10 +181,19 @@
             </entry>
           </file>
           <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/Node.h">
+            <entry file="file://$PROJECT_DIR$/ProblemInstance.cpp">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="180">
-                  <caret line="12" column="17" selection-start-line="12" selection-start-column="17" selection-end-line="12" selection-end-column="17" />
+                <state relative-caret-position="302">
+                  <caret line="49" selection-start-line="49" selection-end-line="51" selection-end-column="1" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/Truck.h">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="240">
+                  <caret line="16" column="24" selection-start-line="16" selection-start-column="8" selection-end-line="16" selection-end-column="24" />
                 </state>
               </provider>
             </entry>
@@ -180,22 +201,10 @@
           <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/Trip.h">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="300">
-                  <caret line="20" selection-start-line="20" selection-end-line="20" />
+                <state relative-caret-position="330">
+                  <caret line="22" column="13" selection-start-line="22" selection-start-column="13" selection-end-line="22" selection-end-column="13" />
                   <folding>
                     <element signature="e#13#30#0" expanded="true" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/Route.h">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="390">
-                  <caret line="26" column="1" selection-start-line="26" selection-start-column="1" selection-end-line="26" selection-end-column="1" />
-                  <folding>
-                    <element signature="e#13#31#0" expanded="true" />
                   </folding>
                 </state>
               </provider>
@@ -204,8 +213,41 @@
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/Solution.h">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="23">
-                  <caret line="60" lean-forward="true" selection-start-line="60" selection-end-line="60" />
+                <state relative-caret-position="1065">
+                  <caret line="71" column="15" selection-start-line="71" selection-start-column="15" selection-end-line="71" selection-end-column="15" />
+                  <folding>
+                    <element signature="e#13#30#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/ReorderNodes.h">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="225">
+                  <caret line="15" column="15" selection-start-line="15" selection-start-column="15" selection-end-line="15" selection-end-column="15" />
+                  <folding>
+                    <element signature="e#13#32#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/RemoveNodes.h">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="120">
+                  <caret line="8" column="19" selection-start-line="8" selection-start-column="19" selection-end-line="8" selection-end-column="19" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/AddNodes.h">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="360">
+                  <caret line="28" column="17" selection-start-line="28" selection-start-column="17" selection-end-line="28" selection-end-column="17" />
                   <folding>
                     <element signature="e#13#30#0" expanded="true" />
                   </folding>
@@ -216,11 +258,20 @@
           <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/Construction.h">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="405">
-                  <caret line="27" selection-start-line="27" selection-end-line="27" />
+                <state relative-caret-position="174">
+                  <caret line="19" column="11" selection-start-line="19" selection-start-column="11" selection-end-line="19" selection-end-column="11" />
                   <folding>
                     <element signature="e#13#32#0" expanded="true" />
                   </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/Node.h">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="45">
+                  <caret line="3" selection-start-line="3" selection-end-line="4" />
                 </state>
               </provider>
             </entry>
@@ -237,9 +288,16 @@
       <find>up</find>
       <find>selectedTrip</find>
       <find>deleteNe</find>
-      <find>aca</find>
       <find>getUnsatisfiedType</find>
       <find>deleteNeighborhood</find>
+      <find>setBene</find>
+      <find>milk</find>
+      <find>unfil</find>
+      <find>removeTrip</find>
+      <find>toPla</find>
+      <find>aca</find>
+      <find>using</find>
+      <find>stoi</find>
       <find>cout</find>
     </findStrings>
     <replaceStrings>
@@ -263,14 +321,20 @@
         <option value="$PROJECT_DIR$/Node.cpp" />
         <option value="$PROJECT_DIR$/Route.h" />
         <option value="$PROJECT_DIR$/ProblemInstance.cpp" />
-        <option value="$PROJECT_DIR$/Makefile" />
-        <option value="$PROJECT_DIR$/Construction.h" />
-        <option value="$PROJECT_DIR$/Solution.h" />
         <option value="$PROJECT_DIR$/Route.cpp" />
-        <option value="$PROJECT_DIR$/Solution.cpp" />
         <option value="$PROJECT_DIR$/Trip.cpp" />
+        <option value="$PROJECT_DIR$/ReorderNodes.h" />
+        <option value="$PROJECT_DIR$/Construction.h" />
+        <option value="$PROJECT_DIR$/Makefile" />
         <option value="$PROJECT_DIR$/Construction.cpp" />
+        <option value="$PROJECT_DIR$/RemoveNodes.cpp" />
+        <option value="$PROJECT_DIR$/RemoveNodes.h" />
+        <option value="$PROJECT_DIR$/AddNodes.cpp" />
+        <option value="$PROJECT_DIR$/AddNodes.h" />
         <option value="$PROJECT_DIR$/main.cpp" />
+        <option value="$PROJECT_DIR$/Solution.h" />
+        <option value="$PROJECT_DIR$/Solution.cpp" />
+        <option value="$PROJECT_DIR$/ReorderNodes.cpp" />
       </list>
     </option>
   </component>
@@ -280,11 +344,12 @@
     <detection-done>true</detection-done>
     <sorting>DEFINITION_ORDER</sorting>
   </component>
+  <component name="OCFindUsagesOptions" text="true" ivars="false" properties="true" derivedClasses="false" />
   <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="-1920" />
     <option name="y" value="-113" />
     <option name="width" value="1920" />
-    <option name="height" value="1057" />
+    <option name="height" value="976" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -349,15 +414,16 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1544810745306</updated>
-      <workItem from="1544810746738" duration="41151000" />
+      <workItem from="1544810746738" duration="81369000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="41151000" />
+    <option name="totallyTimeSpent" value="81369000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-1920" y="-113" width="1920" height="1057" extended-state="6" />
+    <frame x="-1920" y="-113" width="1920" height="976" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info id="Favorites" side_tool="true" />
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.12939297" />
@@ -365,7 +431,7 @@
       <window_info anchor="bottom" id="CMake" />
       <window_info anchor="bottom" id="Database Changes" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" show_stripe_button="false" />
-      <window_info active="true" anchor="bottom" id="Terminal" visible="true" weight="0.93160623" />
+      <window_info active="true" anchor="bottom" id="Terminal" visible="true" weight="0.25226244" />
       <window_info anchor="bottom" id="Event Log" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
@@ -407,20 +473,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Truck.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
-          <caret line="16" column="24" selection-start-line="16" selection-start-column="8" selection-end-line="16" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Node.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="12" column="17" selection-start-line="12" selection-start-column="17" selection-end-line="12" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Node.cpp">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="300">
@@ -435,40 +487,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ProblemInstance.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="435">
-          <caret line="29" column="19" selection-start-line="29" selection-start-column="8" selection-end-line="29" selection-end-column="19" />
-          <folding>
-            <element signature="e#13#32#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Trip.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
-          <caret line="20" selection-start-line="20" selection-end-line="20" />
-          <folding>
-            <element signature="e#13#30#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Makefile">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
-          <caret line="15" column="11" lean-forward="true" selection-start-line="15" selection-start-column="11" selection-end-line="15" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ProblemInstance.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="440">
-          <caret line="62" column="41" selection-start-line="62" selection-start-column="41" selection-end-line="62" selection-end-column="41" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Route.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="390">
@@ -479,61 +497,157 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Construction.h">
+    <entry file="file://$PROJECT_DIR$/ReorderNodes.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="405">
-          <caret line="27" selection-start-line="27" selection-end-line="27" />
+        <state relative-caret-position="225">
+          <caret line="15" column="15" selection-start-line="15" selection-start-column="15" selection-end-line="15" selection-end-column="15" />
           <folding>
             <element signature="e#13#32#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Solution.h">
+    <entry file="file://$PROJECT_DIR$/Truck.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="23">
-          <caret line="60" lean-forward="true" selection-start-line="60" selection-end-line="60" />
+        <state relative-caret-position="240">
+          <caret line="16" column="24" selection-start-line="16" selection-start-column="8" selection-end-line="16" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Trip.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="330">
+          <caret line="22" column="13" selection-start-line="22" selection-start-column="13" selection-end-line="22" selection-end-column="13" />
           <folding>
             <element signature="e#13#30#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/ProblemInstance.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="435">
+          <caret line="29" column="13" lean-forward="true" selection-start-line="29" selection-start-column="13" selection-end-line="29" selection-end-column="13" />
+          <folding>
+            <element signature="e#13#32#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ProblemInstance.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="302">
+          <caret line="49" selection-start-line="49" selection-end-line="51" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/Route.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="347">
-          <caret line="24" column="27" selection-start-line="24" selection-start-column="27" selection-end-line="24" selection-end-column="27" />
+        <state relative-caret-position="-15">
+          <caret line="21" column="12" selection-start-line="21" selection-start-column="4" selection-end-line="21" selection-end-column="12" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Trip.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="12" column="27" selection-start-line="12" selection-start-column="27" selection-end-line="12" selection-end-column="27" />
+        <state relative-caret-position="205">
+          <caret line="17" column="11" selection-start-line="17" selection-start-column="11" selection-end-line="17" selection-end-column="11" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Solution.cpp">
+    <entry file="file://$PROJECT_DIR$/Makefile">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="855">
-          <caret line="57" column="5" lean-forward="true" selection-start-line="56" selection-start-column="5" selection-end-line="57" selection-end-column="5" />
+        <state>
+          <caret column="137" selection-start-column="137" selection-end-column="137" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Construction.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="174">
+          <caret line="19" column="11" selection-start-line="19" selection-start-column="11" selection-end-line="19" selection-end-column="11" />
+          <folding>
+            <element signature="e#13#32#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Construction.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="276">
-          <caret line="135" column="38" lean-forward="true" selection-start-line="135" selection-start-column="38" selection-end-line="135" selection-end-column="38" />
+        <state relative-caret-position="181">
+          <caret line="132" selection-start-line="132" selection-end-line="132" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/RemoveNodes.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="8" column="19" selection-start-line="8" selection-start-column="19" selection-end-line="8" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Node.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="45">
+          <caret line="3" selection-start-line="3" selection-end-line="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/AddNodes.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="360">
+          <caret line="28" column="17" selection-start-line="28" selection-start-column="17" selection-end-line="28" selection-end-column="17" />
+          <folding>
+            <element signature="e#13#30#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/RemoveNodes.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-352">
+          <caret line="59" column="79" selection-start-line="59" selection-start-column="44" selection-end-line="59" selection-end-column="79" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/main.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="818">
-          <caret line="55" column="29" selection-start-line="55" selection-start-column="29" selection-end-line="55" selection-end-column="29" />
+        <state relative-caret-position="91">
+          <caret line="17" selection-start-line="17" selection-end-line="17" />
           <folding>
             <element signature="e#0#19#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Solution.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1065">
+          <caret line="71" column="15" selection-start-line="71" selection-start-column="15" selection-end-line="71" selection-end-column="15" />
+          <folding>
+            <element signature="e#13#30#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Solution.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-5275">
+          <caret line="35" lean-forward="true" selection-start-line="35" selection-end-line="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/AddNodes.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1694">
+          <caret line="32" column="15" selection-start-line="32" selection-start-column="15" selection-end-line="32" selection-end-column="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ReorderNodes.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="276">
+          <caret line="30" column="22" selection-start-line="30" selection-start-column="22" selection-end-line="30" selection-end-column="22" />
         </state>
       </provider>
     </entry>

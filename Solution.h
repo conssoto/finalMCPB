@@ -46,7 +46,7 @@ public:
     void addTrip(Trip *trip, Route *route);
     void addBackToPlant(int i, Node *currentNode, Route *currentRoute, bool pos, bool repairing);
 
-    void insertTrip(Route *route, Solution *solution, int index, Node *node);
+    void insertTrip(Route *route, int index, Node *node);
     void insertNode(Node *node);
 
     Trip *newTrip(Node *node1, Node *node2, Route *route);
@@ -58,13 +58,16 @@ public:
     Truck *getNextTruck();
     double getTotalBenefit();
     int getDemandSubtraction(int dda, int prod);
+    char getType(int i);
 
     void removeTruck(Truck *truck);
     void removeNode(Node *node);
-    void removeTrip(int tripIndex, Route *route, Solution *solution);
+    void removeTrip(int tripIndex, Route *route);
     void deleteRoutes();
 
     double calculateBenefit(Trip *trip, int typeIndex);
 
     void printAll();
+    void printSolution();
+    vector<int> convertMilk();
 };

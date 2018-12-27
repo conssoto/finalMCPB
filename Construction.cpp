@@ -1,11 +1,15 @@
 #include "Construction.h"
 
-Construction::Construction(size_t alpha, Solution *solution):alpha(alpha),totalProduction(0), currentType(1), currentNode(solution->plant), currentRoute(solution->routes.back()){};
+Construction::Construction(size_t alpha, Solution *solution):alpha(alpha),totalProduction(0), currentType(1), currentNode(solution->plant), currentRoute(solution->routes.back()), construct(true){};
 
 Construction::~Construction(){
     cout<< "Deleting construction" << endl;
 
-    this->deleteNeighborhood();
+    for (Trip *t:this->neighborhood) {
+        delete t;
+    }
+    this->neighborhood.clear();
+    this->neighborhood.shrink_to_fit(); //TODO borrar la ruta??
 }
 
 bool Construction::fitsInTruck(Route *route, Node *node){
@@ -41,19 +45,23 @@ void Construction::setNeighborhood(Solution *solution, bool repairing) {
     vector<Trip *> options;
     if (repairing){
         vector<Route *> unfilledRoutes(solution->getUnfilledRoutes());
-
-        this->currentRoute =unfilledRoutes.back();
-        this->currentNode = this->currentRoute->trips.back()->finalNode;
-        this->currentType = this->currentRoute->getType();
-
-        if(this->currentNode == solution->plant){
-            this->currentRoute->distance -= this->currentRoute->trips.back()->distance;
-            this->currentRoute->trips.pop_back(); //saco la vuelta a la planta
-            this->currentNode = this->currentRoute->trips.back()->finalNode;
+        if(unfilledRoutes.empty()){
+            this->construct = false;
         }
-        options = getOptions(solution, this->currentType, this->currentNode, true);
-    }
+        if(this->construct){
+            this->currentRoute =unfilledRoutes.back();
+            this->currentNode = this->currentRoute->trips.back()->finalNode;
+            this->currentType = this->currentRoute->getType();
 
+            if(this->currentNode == solution->plant){
+
+                this->currentRoute->distance -= this->currentRoute->trips.back()->distance;
+                this->currentRoute->trips.pop_back(); //saco la vuelta a la planta
+                this->currentNode = this->currentRoute->trips.back()->finalNode;
+            }
+            options = getOptions(solution, this->currentType, this->currentNode, true);
+        }
+    }
     else{
         this->currentNode = solution->getCurrentNode();
         this->currentRoute = solution->routes.back();
@@ -117,6 +125,9 @@ void Construction::feasibleSolution(Solution *solution) {
     while (solution->getUnsatisfiedType() != -1) {
         setNeighborhood(solution, false);
         Trip *selectedTrip = roulette();
+        if (this->currentRoute->trips.empty()){
+
+        }
         solution->addTrip(selectedTrip, this->currentRoute);
         solution->stepUpdateSolution(selectedTrip, this->currentRoute, false);
 
@@ -129,11 +140,17 @@ void Construction::feasibleSolution(Solution *solution) {
 
     /// Fase 2: reparacion, agregar nodos a los camiones con espacio.
 //    cout << endl <<  " -----FASE 2-----" << endl;
+    this->construct = true;
     while (solution->getUnsatisfiedType() != -1) {
         setNeighborhood(solution, true);
-        Trip *selectedTrip = roulette();
-        solution->addTrip(selectedTrip, this->currentRoute);
-        solution->stepUpdateSolution(selectedTrip, this->currentRoute, true);
+        if(construct){
+            Trip *selectedTrip = roulette();
+            solution->addTrip(selectedTrip, this->currentRoute);
+            solution->stepUpdateSolution(selectedTrip, this->currentRoute, true);
+        }
+        else{
+            break;
+        }
     }
     this->updateIds(solution->routes);
 //    solution->printAll();

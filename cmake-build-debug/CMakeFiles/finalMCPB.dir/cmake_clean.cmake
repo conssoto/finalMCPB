@@ -8,6 +8,9 @@ file(REMOVE_RECURSE
   "CMakeFiles/finalMCPB.dir/Route.cpp.o"
   "CMakeFiles/finalMCPB.dir/Solution.cpp.o"
   "CMakeFiles/finalMCPB.dir/Construction.cpp.o"
+  "CMakeFiles/finalMCPB.dir/ReorderNodes.cpp.o"
+  "CMakeFiles/finalMCPB.dir/RemoveNodes.cpp.o"
+  "CMakeFiles/finalMCPB.dir/AddNodes.cpp.o"
   "finalMCPB.pdb"
   "finalMCPB"
 )

@@ -30,7 +30,7 @@ Solution::Solution(ProblemInstance *problemInstance, vector<bool> parameters){
 }
 
 Solution::~Solution() {
-    cout << "Deleting Solution" << endl;
+//    cout << "Deleting Solution" << endl;
     this->recollected.clear();
     this->recollected.shrink_to_fit();
 
@@ -187,14 +187,14 @@ void Solution::insertNode(Node *node) {
     }
 }
 
-void Solution::insertTrip(Route *route, Solution *solution, int index, Node *node) {
+void Solution::insertTrip(Route *route, int index, Node *node) {
     Trip *modifiedNode = route->trips[index];
     route->distance -= modifiedNode->distance;
-    Trip *newTrip = solution->newTrip(modifiedNode->initialNode, node, route);
+    Trip *newTrip = this->newTrip(modifiedNode->initialNode, node, route);
 
     modifiedNode->initialNode = node;
-    modifiedNode->distance = solution->problemInstance->getDistance(modifiedNode->initialNode, modifiedNode->finalNode);
-    modifiedNode->setBenefit(solution->calculateBenefit(modifiedNode, route->getTypeIndex()));
+    modifiedNode->distance = this->problemInstance->getDistance(modifiedNode->initialNode, modifiedNode->finalNode);
+    modifiedNode->setBenefit(this->calculateBenefit(modifiedNode, route->getTypeIndex()));
 
     route->distance += modifiedNode->distance + newTrip->distance;
     route->remainingCapacity -= newTrip->finalNode->getProduction();
@@ -202,14 +202,14 @@ void Solution::insertTrip(Route *route, Solution *solution, int index, Node *nod
     route->trips.insert(route->trips.begin() + index, newTrip);
 }
 
-double Solution::calculateBenefit(Trip *trip, int typeIndex) {
+double Solution::calculateBenefit(Trip *trip, int typeIndex) { //TODO no es el beneficio
     return this->literCost[typeIndex] * trip->finalNode->getProduction() -
            this->kilometerCost * trip->distance;
 }
 
 Trip *Solution::newTrip(Node *node1, Node *node2, Route *route) {
     int distance(problemInstance->getDistance(node1, node2));
-    auto trip = new Trip(node1, node2, distance); // TODO arreglar el id trip
+    auto trip = new Trip(node1, node2, distance);
     trip->setBenefit(calculateBenefit(trip, route->getTypeIndex()));
     trip->setRouteId(route->getId());
     return trip;
@@ -218,7 +218,7 @@ Trip *Solution::newTrip(Node *node1, Node *node2, Route *route) {
 Trip *Solution::fakeTrip(Node *node1, Node *node2, Node *node3, Route *route) {
     int d1(problemInstance->getDistance(node1, node2));
     int d2(problemInstance->getDistance(node2, node3));
-    auto trip = new Trip(node1, node2, d1 + d2); // TODO arreglar el id trip
+    auto trip = new Trip(node1, node2, d1 + d2);
     trip->setBenefit(calculateBenefit(trip, route->getTypeIndex()));
     trip->setRouteId(route->getId());
     return trip;
@@ -268,15 +268,15 @@ void Solution::removeNode(Node *node) {
     }
 }
 
-void Solution::removeTrip(int tripIndex, Route *route, Solution *solution) {
+void Solution::removeTrip(int tripIndex, Route *route) {
     Trip *currentTrip = route->trips[tripIndex]; // 0-x
     Trip *nextTrip = route->trips[tripIndex + 1];// x-0
 
     route->distance -= currentTrip->distance + nextTrip->distance;//0
 
     nextTrip->initialNode = currentTrip->initialNode; //x-0 -> 0-0
-    nextTrip->distance = solution->problemInstance->getDistance(nextTrip->initialNode, nextTrip->finalNode);//0
-    nextTrip->setBenefit(solution->calculateBenefit(nextTrip, route->getTypeIndex()));//0
+    nextTrip->distance = this->problemInstance->getDistance(nextTrip->initialNode, nextTrip->finalNode);//0
+    nextTrip->setBenefit(this->calculateBenefit(nextTrip, route->getTypeIndex()));//0
 
     route->distance += nextTrip->distance;//0
     route->remainingCapacity += currentTrip->finalNode->getProduction();//0
@@ -301,6 +301,7 @@ void Solution::addBackToPlant(int i, Node *currentNode, Route *currentRoute, boo
     if (currentRoute->trips.back()->finalNode != this->plant){
         if (this->unsatisfiedDemand[i] < 0 and pos) { // vuelve a planta si ya suplio la demanda
             Trip *toPlant = newTrip(currentNode, this->plant, currentRoute);
+            currentRoute->distance += toPlant->distance;
             addTrip(toPlant, currentRoute);
             int actual(-1);
             for (int i = 0; i < this->unsatisfiedDemand.size(); ++i) {
@@ -344,9 +345,11 @@ void Solution::resetDemands() {
             }
             this->recollected[trip->finalNode->getTypeIndex()] += trip->finalNode->getProduction();
         }
-        this->unsatisfiedDemand[type-1] -= routeProd;
-        if (this->unsatisfiedDemand[type-1]< 0){
-            this->unsatisfiedDemand[type] -= -this->unsatisfiedDemand[type-1]; // si afecta mas alla del siguiente
+        int subtracting = routeProd;
+        for (int i = type-1; i < this->unsatisfiedDemand.size(); ++i) {
+            int aux(getDemandSubtraction(this->unsatisfiedDemand[i], subtracting));
+            this->unsatisfiedDemand[i] -= subtracting;
+            subtracting = aux;
         }
     }
 }
@@ -384,13 +387,13 @@ void Solution::printAll() {
 
     double totalRecollected(0);
     cout << "recollected x quality: " << endl;
-    for (double r: this->recollected) {
+    for (int r: this->recollected) {
         totalRecollected += r;
         cout << r << endl;
     }
 
     cout << "Demand satisfaction: " << endl;
-    for (double d: this->unsatisfiedDemand) {
+    for (int d: this->unsatisfiedDemand) {
         cout << d << endl;
     }
 
@@ -441,3 +444,120 @@ void Solution::printAll() {
         r->printAll();
     }
 }
+
+char Solution::getType(int i){
+    if(i == 0){
+        return 'C';
+    }
+    if(i == 1){
+        return 'B';
+    }
+    if(i == 2){
+        return 'A';
+    }
+}
+
+vector<int> Solution::convertMilk() {
+    vector<int> inPlant;
+    vector<int> recollectedMilk = this->recollected;
+    vector<int> dda = this->problemInstance->qualities;
+    vector<int> totalMilk;
+
+    for(int i = 0; i < problemInstance->getNumberOfQualities(); ++i){
+        totalMilk.push_back(0);
+    }
+
+    reverse(recollectedMilk.begin(), recollectedMilk.end());
+    reverse(dda.begin(), dda.end());
+    for(int i =0; i < dda.size(); ++i){
+        for(int j =0; j < recollectedMilk.size(); ++j){
+            if (dda[i] > 0){
+                if(recollectedMilk[j]>0){
+                    int diff = recollectedMilk[j] - dda[i];
+                    if (diff>=0){
+                        if (i == j){
+                            cout << recollectedMilk[j] << " de leche " << getType(i) << " se usa como leche " << getType(j) << " en la planta" << endl;
+                            totalMilk[j] += recollectedMilk[j];
+                            recollectedMilk[j] = 0;
+                            break;
+                        }
+                        else {
+                            recollectedMilk[j] -= dda[i];
+                            cout << dda[i] << " de leche " << getType(j) << " se usa como leche " << getType(i) << " en la planta" << endl;
+                            totalMilk[i] += dda[i];
+                            break;
+                        }
+                    }
+                    else{
+                        cout << recollectedMilk[j] << " de leche " << getType(i) << " se usa como leche " << getType(j) << " en la planta" << endl;
+                        totalMilk[j] += recollectedMilk[j];
+                        recollectedMilk[j] -= dda[i];
+                        dda[i] = -recollectedMilk[j];
+                        recollectedMilk[j] = 0;
+                    }
+                }
+            }
+            else{
+                break;
+            }
+        }
+    }
+    return totalMilk;
+}
+
+void Solution::printSolution() {
+    cout << "Cantidad mínima a recoger (litros): " << endl;
+    for (int d: this->problemInstance->qualities) {
+        cout << d << endl;
+    }
+
+    cout << "Flota Camiones: " << endl;
+    cout << "Nro. Cam.: " << this->problemInstance->trucks.size() << endl;
+    cout << "Capacidad (litros): " << this->problemInstance->trucks[0]->getTotalCapacity() << endl;
+
+    cout << "Beneficio unitario ($/litro)" << endl;
+    for (double i : this->literCost) {
+        cout << i << endl;
+    }
+
+    cout << endl << "Resultados:" << endl;
+
+    for(Route *r: this->routes){
+        cout << endl << "Muestra Ruta Ordenada " << r->getId() << ":" << endl;
+        for (Trip *t: r->trips){
+            cout << " "<< t->finalNode->getId() << " ";
+        }
+    }
+    cout << endl;
+
+    double totalDistance(0);
+    double totalBenefit(0);
+    for (Route *r: this->routes) {
+        totalDistance += r->distance;
+        for (Trip *t: r->trips) {
+            totalBenefit += t->benefit;
+        }
+    }
+
+    cout << "recollected x quality: " << endl;
+    for (int i =1 ; i <=  this->recollected.size(); i++) {
+        cout << "En total llegan " << this->recollected[i-1] << " litros leche tipo " << i << " la planta" << endl;
+    }
+
+    for (Route *r: this->routes) {
+        cout << (this->problemInstance->trucks[r->truck->getId() - 1]->getTotalCapacity() - r->remainingCapacity)
+             << " litros de leche " << r->type << " llegan en Camion " << r->truck->getId() << endl;
+    }
+
+    vector<int> totalMilk = convertMilk();
+    reverse(totalMilk.begin(), totalMilk.end());
+
+    double suma(0);
+    for (int i = 0; i < totalMilk.size(); ++i) {
+        suma += totalMilk[i] * this->literCost[i];
+    }
+
+    cout << "COSTO_TPTE = " << totalDistance << endl;
+    cout << "INGRESO_LECHE = " << to_string(suma) << endl;
+}
+

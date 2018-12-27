@@ -82,6 +82,12 @@
 				</MakeCommands>
 			</Target>
 		</Build>
+		<Unit filename="/Users/constanzasoto/TT1-TT2/finalMCPB/AddNodes.cpp">
+			<Option target="finalMCPB"/>
+		</Unit>
+		<Unit filename="/Users/constanzasoto/TT1-TT2/finalMCPB/AddNodes.h">
+			<Option target="finalMCPB"/>
+		</Unit>
 		<Unit filename="/Users/constanzasoto/TT1-TT2/finalMCPB/Construction.cpp">
 			<Option target="finalMCPB"/>
 		</Unit>
@@ -104,6 +110,18 @@
 			<Option target="finalMCPB"/>
 		</Unit>
 		<Unit filename="/Users/constanzasoto/TT1-TT2/finalMCPB/Reader.h">
+			<Option target="finalMCPB"/>
+		</Unit>
+		<Unit filename="/Users/constanzasoto/TT1-TT2/finalMCPB/RemoveNodes.cpp">
+			<Option target="finalMCPB"/>
+		</Unit>
+		<Unit filename="/Users/constanzasoto/TT1-TT2/finalMCPB/RemoveNodes.h">
+			<Option target="finalMCPB"/>
+		</Unit>
+		<Unit filename="/Users/constanzasoto/TT1-TT2/finalMCPB/ReorderNodes.cpp">
+			<Option target="finalMCPB"/>
+		</Unit>
+		<Unit filename="/Users/constanzasoto/TT1-TT2/finalMCPB/ReorderNodes.h">
 			<Option target="finalMCPB"/>
 		</Unit>
 		<Unit filename="/Users/constanzasoto/TT1-TT2/finalMCPB/Route.cpp">

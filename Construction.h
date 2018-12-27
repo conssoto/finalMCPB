@@ -18,6 +18,7 @@ public:
     int currentType;
     Node *currentNode;
     Route *currentRoute;
+    bool construct;
 
 public:
     explicit Construction(size_t alpha, Solution *solution);

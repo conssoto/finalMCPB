@@ -123,6 +123,33 @@ finalMCPB/fast:
 	$(MAKE) -f CMakeFiles/finalMCPB.dir/build.make CMakeFiles/finalMCPB.dir/build
 .PHONY : finalMCPB/fast
 
+AddNodes.o: AddNodes.cpp.o
+
+.PHONY : AddNodes.o
+
+# target to build an object file
+AddNodes.cpp.o:
+	$(MAKE) -f CMakeFiles/finalMCPB.dir/build.make CMakeFiles/finalMCPB.dir/AddNodes.cpp.o
+.PHONY : AddNodes.cpp.o
+
+AddNodes.i: AddNodes.cpp.i
+
+.PHONY : AddNodes.i
+
+# target to preprocess a source file
+AddNodes.cpp.i:
+	$(MAKE) -f CMakeFiles/finalMCPB.dir/build.make CMakeFiles/finalMCPB.dir/AddNodes.cpp.i
+.PHONY : AddNodes.cpp.i
+
+AddNodes.s: AddNodes.cpp.s
+
+.PHONY : AddNodes.s
+
+# target to generate assembly for a file
+AddNodes.cpp.s:
+	$(MAKE) -f CMakeFiles/finalMCPB.dir/build.make CMakeFiles/finalMCPB.dir/AddNodes.cpp.s
+.PHONY : AddNodes.cpp.s
+
 Construction.o: Construction.cpp.o
 
 .PHONY : Construction.o
@@ -230,6 +257,60 @@ Reader.s: Reader.cpp.s
 Reader.cpp.s:
 	$(MAKE) -f CMakeFiles/finalMCPB.dir/build.make CMakeFiles/finalMCPB.dir/Reader.cpp.s
 .PHONY : Reader.cpp.s
+
+RemoveNodes.o: RemoveNodes.cpp.o
+
+.PHONY : RemoveNodes.o
+
+# target to build an object file
+RemoveNodes.cpp.o:
+	$(MAKE) -f CMakeFiles/finalMCPB.dir/build.make CMakeFiles/finalMCPB.dir/RemoveNodes.cpp.o
+.PHONY : RemoveNodes.cpp.o
+
+RemoveNodes.i: RemoveNodes.cpp.i
+
+.PHONY : RemoveNodes.i
+
+# target to preprocess a source file
+RemoveNodes.cpp.i:
+	$(MAKE) -f CMakeFiles/finalMCPB.dir/build.make CMakeFiles/finalMCPB.dir/RemoveNodes.cpp.i
+.PHONY : RemoveNodes.cpp.i
+
+RemoveNodes.s: RemoveNodes.cpp.s
+
+.PHONY : RemoveNodes.s
+
+# target to generate assembly for a file
+RemoveNodes.cpp.s:
+	$(MAKE) -f CMakeFiles/finalMCPB.dir/build.make CMakeFiles/finalMCPB.dir/RemoveNodes.cpp.s
+.PHONY : RemoveNodes.cpp.s
+
+ReorderNodes.o: ReorderNodes.cpp.o
+
+.PHONY : ReorderNodes.o
+
+# target to build an object file
+ReorderNodes.cpp.o:
+	$(MAKE) -f CMakeFiles/finalMCPB.dir/build.make CMakeFiles/finalMCPB.dir/ReorderNodes.cpp.o
+.PHONY : ReorderNodes.cpp.o
+
+ReorderNodes.i: ReorderNodes.cpp.i
+
+.PHONY : ReorderNodes.i
+
+# target to preprocess a source file
+ReorderNodes.cpp.i:
+	$(MAKE) -f CMakeFiles/finalMCPB.dir/build.make CMakeFiles/finalMCPB.dir/ReorderNodes.cpp.i
+.PHONY : ReorderNodes.cpp.i
+
+ReorderNodes.s: ReorderNodes.cpp.s
+
+.PHONY : ReorderNodes.s
+
+# target to generate assembly for a file
+ReorderNodes.cpp.s:
+	$(MAKE) -f CMakeFiles/finalMCPB.dir/build.make CMakeFiles/finalMCPB.dir/ReorderNodes.cpp.s
+.PHONY : ReorderNodes.cpp.s
 
 Route.o: Route.cpp.o
 
@@ -375,6 +456,9 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
 	@echo "... finalMCPB"
+	@echo "... AddNodes.o"
+	@echo "... AddNodes.i"
+	@echo "... AddNodes.s"
 	@echo "... Construction.o"
 	@echo "... Construction.i"
 	@echo "... Construction.s"
@@ -387,6 +471,12 @@ help:
 	@echo "... Reader.o"
 	@echo "... Reader.i"
 	@echo "... Reader.s"
+	@echo "... RemoveNodes.o"
+	@echo "... RemoveNodes.i"
+	@echo "... RemoveNodes.s"
+	@echo "... ReorderNodes.o"
+	@echo "... ReorderNodes.i"
+	@echo "... ReorderNodes.s"
 	@echo "... Route.o"
 	@echo "... Route.i"
 	@echo "... Route.s"
