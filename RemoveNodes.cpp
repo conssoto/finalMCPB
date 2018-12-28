@@ -52,7 +52,7 @@ void RemoveNodes::breakDemands(Solution *solution) { // hasta rom,per alguna, no
         int deleteRouteIndex = (rand() % (int)(solution->routes.size()-1)); // cualquier ruta
         Route *route(solution->routes[deleteRouteIndex]);
         int deleteTripIndex(0);
-        if (route->trips.size() != 2) { //TODO deberia poder borrar si son solo dos
+        if (route->trips.size() != 2) {
             deleteTripIndex = (rand() % (int)(route->trips.size()-2)); // cualquier trip menos el ultimo
         }
         if (route->trips[deleteTripIndex]->finalNode != solution->plant) {

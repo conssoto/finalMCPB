@@ -14,10 +14,11 @@ public:
     double bestDistance;
     int bestIndex;
     Node *node;
+    int randomIterations;
 
 
 public:
-    ReorderNodes();
+    ReorderNodes(int ri = 0);
     ~ReorderNodes();
 
     void removeTrip(int tripIndex, Route *route, Solution *solution);

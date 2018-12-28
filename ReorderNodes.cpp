@@ -1,6 +1,6 @@
 #include "ReorderNodes.h"
 
-ReorderNodes::ReorderNodes()=default;
+ReorderNodes::ReorderNodes(int ri):randomIterations(ri){};
 
 ReorderNodes::~ReorderNodes()=default;
 
@@ -29,14 +29,21 @@ void ReorderNodes::setBest(Route *route, ProblemInstance *problemInstance) {
 void ReorderNodes::movement(Solution *solution) {
 //    cout << endl <<  "ReorderNodes: " << endl;
     for (Route *route: solution->routes) {
-        for (int i = 0; i < route->trips.size() - 1; ++i) {
-
+        if(this->randomIterations){
+            cout << "aaca" << endl;
+            int i = rand() % int(route->trips.size());
             removeTrip(i, route, solution);
             setBest(route, solution->problemInstance);
             solution->insertTrip(route, this->bestIndex, this->node);
         }
+        else{
+            for (int i = 0; i < route->trips.size() - 1; ++i) {
+                removeTrip(i, route, solution);
+                setBest(route, solution->problemInstance);
+                solution->insertTrip(route, this->bestIndex, this->node);
+            }
+        }
     }
-//    cout << endl;
 }
 
 void ReorderNodes::printRoute(Route *route){
