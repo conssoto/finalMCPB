@@ -63,14 +63,12 @@ void RemoveNodes::breakDemands(Solution *solution) { // hasta rom,per alguna, no
             solution->resetDemands();
         }
         for (int d: solution->unsatisfiedDemand) { //si rompe alguna, para.
-            if (d < -100000){
-                cout << "*****************************************************************************" << endl;
-            }
             if (d > 0) {
                 stopCritera = true;
             }
         }
     }
+    solution->resetRouteFull();
 }
 
 void RemoveNodes::movement(Solution *solution){

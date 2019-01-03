@@ -28,4 +28,4 @@ void Trip::printAll() {
 
 bool sortByDistance(const Trip *t1, const Trip *t2){ return t1->distance < t2->distance; }
 
-bool sortByBenefit(const Trip *t1, const Trip *t2){ return t1->benefit < t2->benefit; }
+bool sortByBenefit(const Trip *t1, const Trip *t2){ return t1->benefit > t2->benefit; }

@@ -218,7 +218,8 @@ Trip *Solution::newTrip(Node *node1, Node *node2, Route *route) {
 Trip *Solution::fakeTrip(Node *node1, Node *node2, Node *node3, Route *route) {
     int d1(problemInstance->getDistance(node1, node2));
     int d2(problemInstance->getDistance(node2, node3));
-    auto trip = new Trip(node1, node2, d1 + d2);
+    int d3(problemInstance->getDistance(node1, node3));
+    auto trip = new Trip(node1, node2, d1 + d2 - d3);
     trip->setBenefit(calculateBenefit(trip, route->getTypeIndex()));
     trip->setRouteId(route->getId());
     return trip;
@@ -351,6 +352,21 @@ void Solution::resetDemands() {
             this->unsatisfiedDemand[i] -= subtracting;
             subtracting = aux;
         }
+    }
+}
+
+
+
+void Solution::resetRouteFull() {
+    for(Route *r: this->routes){
+        r->full = true;
+        for (int i = 0; i < this->nodesXQuality[r->getTypeIndex()]; ++i) {
+            Node *option = this->unvisitedNodes[i];
+            if (r->fitsInTruck(option)) {
+                r->full = false;
+            }
+        }
+        cout << "route " << r->getId() << " is " << r->isFull() << endl;
     }
 }
 

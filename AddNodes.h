@@ -7,34 +7,27 @@
 #include "Solution.h"
 #include <iostream>
 #include <numeric>
+#include <cmath>
 
 class AddNodes {
 public:
-    vector<Trip *> neighborhood;
-    Node *removedNode;
-    double totalBenefit;
+    vector<bool> neighborhood;
     int insertPosition;
     int currentType;
-    int benefitOnly;
     bool fix;
-    vector <Node *> tabuList;
+    vector <Route *> unfilledRoutes;
+    Route *currentRoute;
+    bool stopCriteria;
 
 public:
     explicit AddNodes();
     ~AddNodes();
 
-    void setNeighborhood(Solution *solution, Route *route);
-    void setTotalBenefit();
-    void setInsertPosition(Route *route, Trip *selectedTrip);
-    void setTabuList(vector <Node *> tabuList);
+    Trip *roulette(Route *route);
+    Trip *getBestOption(Trip *trip, Route *route, Solution *solution);
+    int getInsertPosition(Route *route, Trip *selectedTrip);
 
-    Trip *roulette();
-    Trip *getNeighbor(Solution *solution, Route *currentRoute, Trip *trip);
-
-    bool fitsInTruck(Route *route, Node *node);
-
-    void deleteOptions(vector<Trip *> options, int aux);
-    void deleteNeighborhood();
+    void deleteOptions(vector<Trip *> options);
 
     void nodeAdding(Route *route, Solution *solution);
     void movement(Solution *solution);

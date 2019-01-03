@@ -28,6 +28,7 @@ public:
     bool isFull();
 
     void setFull();
+    bool fitsInTruck(Node *node);
 
     void printAll();
 };

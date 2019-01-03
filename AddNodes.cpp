@@ -3,175 +3,141 @@
 AddNodes::AddNodes():currentType(1), fix(true){};
 
 AddNodes::~AddNodes(){
-    for (Trip *t: this->neighborhood){
-        delete t; // se borran los trips menos el primero
-    }
+//    for (Trip *t: this->neighborhood){
+//        delete t; // se borran los trips menos el primero
+//    }
     this->neighborhood.clear(); // se borran todos los punteros
     this->neighborhood.shrink_to_fit();
 }
 
-bool AddNodes::fitsInTruck(Route *route, Node *node){
-    return route->remainingCapacity >= node->getProduction();
-}
 
-void AddNodes::deleteNeighborhood(){
-    for (Trip *trip:this->neighborhood) {
-        delete trip;
-    }
-    this->neighborhood.clear();
-    this->neighborhood.shrink_to_fit();
-}
-
-void AddNodes::deleteOptions(vector<Trip *> options, int aux = 1){
-    for (int i = aux; i < options.size(); ++i){
+void AddNodes::deleteOptions(vector<Trip *> options){
+    for (int i = 1; i < options.size(); ++i){
         delete options[i]; // se borran los trips menos el primero
     }
     options.clear(); // se borran todos los punteros
     options.shrink_to_fit();
 }
 
-void AddNodes::setTabuList(vector <Node *> tabuList){
-    this->tabuList.clear();
-    for (Node *node: tabuList){
-        Node *copy = node;
-        this->tabuList.push_back(copy);
-    }
+
+Trip *AddNodes::roulette(Route *route) {
+    int beta = rand() % (int)route->trips.size();
+    return route->trips[beta];
 }
 
-Trip *AddNodes::getNeighbor(Solution *solution, Route *route, Trip *trip) {
+
+Trip *AddNodes::getBestOption(Trip *trip, Route *route, Solution *solution){
     vector<Trip *> options;
-    Trip *selectedTrip = nullptr;
     Node *currentNode = trip->initialNode;
     Node *nextNode = trip->finalNode;
     for (int i = 0; i < solution->nodesXQuality[route->getTypeIndex()]; ++i) {
         Node *option = solution->unvisitedNodes[i];
-        if(find(this->tabuList.begin(), this->tabuList.end(), option) == this->tabuList.end()) {
-            if (fitsInTruck(route, option)) {
-                auto fakeTrip = solution->fakeTrip(currentNode, option, nextNode, route);
-                if (benefitOnly) {
-                    if (fakeTrip->benefit > 0) {
-                        options.push_back(fakeTrip);
-                    } else {
-                        delete fakeTrip;
-                    }
-                } else {
-                    options.push_back(fakeTrip);
-                }
-            }
+//        if (find(this->tabuList.begin(), this->tabuList.end(), option) == this->tabuList.end()) {
+        if (route->fitsInTruck(option)) {
+//                cout << "options best fits" << endl;
+            auto fakeTrip = solution->fakeTrip(currentNode, option, nextNode, route);
+            options.push_back(fakeTrip);
+            cout << "ben " << fakeTrip->benefit << endl;
         }
+//        }
     }
     if (!options.empty()) {
         sort(options.begin(), options.end(), sortByBenefit);
-        selectedTrip = options[0]; //puntero apunta al trip
         deleteOptions(options); //TODO elimina punteros y trips?
-    }
-    // TODO lista tabu?
-    return selectedTrip;
-}
-
-void AddNodes::setNeighborhood(Solution *solution, Route *route) {
-    this->neighborhood.clear();
-    vector<Trip *> options;
-    for (Trip *trip: route->trips) {
-        Trip *selectedTrip = getNeighbor(solution, route, trip);
-        if (selectedTrip) {
-            options.push_back(selectedTrip);
-        }
-    }
-    this->neighborhood = options;
-}
-
-void AddNodes::setTotalBenefit() {
-    this->totalBenefit = 0;
-    if (benefitOnly) {
-        for (Trip *trip: this->neighborhood) {
-            this->totalBenefit += trip->benefit;
-        }
-    } else {
-        for (Trip *trip: this->neighborhood) {
-            this->totalBenefit += -1 / trip->benefit;
-        }
+        cout << "selected" << options[0]->benefit << endl;
+        return options[0];
     }
 }
 
-Trip *AddNodes::roulette() {
-    setTotalBenefit();
-    int beta = rand() % 101;
-    double choiceProbability(0);
-    int aux(0);
-    for (Trip *trip: this->neighborhood) {
-        if (beta > stoi(to_string(choiceProbability))) {
-            if (benefitOnly) {
-                choiceProbability += trip->benefit * 100.0 / this->totalBenefit;
-            } else {
-                choiceProbability += -1 / trip->benefit * 100.0 / this->totalBenefit;
-            }
-        }
-        if ((beta <= stoi(to_string(choiceProbability))) or (stoi(to_string(choiceProbability)) == 100)) {
-            auto *selectedTrip = new Trip(*trip);
-            deleteNeighborhood();
-            deleteOptions(this->neighborhood, aux);
-            return selectedTrip;
-        }
-    }
-}
 
-void AddNodes::setInsertPosition(Route *route, Trip *selectedTrip){
+int AddNodes::getInsertPosition(Route *route, Trip *selectedTrip){
     for(int i = 0; i < route->trips.size(); ++i){
         if(route->trips[i]->initialNode == selectedTrip->initialNode){
-            this->insertPosition = i;
-            break;
-        }
-    }
-};
-
-void AddNodes::nodeAdding(Route *route, Solution *solution){
-    bool stopCritera(false);
-    while (!stopCritera) { // mientras tenga nodos que sacar, saca
-        setNeighborhood(solution, route);
-        if (!this->neighborhood.empty()) {
-            Trip *selectedTrip = roulette();
-            setInsertPosition(route, selectedTrip);
-            solution->insertTrip(route, this->insertPosition, selectedTrip->finalNode);
-            solution->updateSolution(selectedTrip->finalNode, true);
-            cout << "->added node " << selectedTrip->finalNode->getId() << " P: " << selectedTrip->finalNode->getProduction() << " D: " << selectedTrip->distance << endl;
-//            route->printTrips();
-            delete selectedTrip;
-        }
-        else {
-            stopCritera = true;
-        }
-        if (!this->benefitOnly and solution->unsatisfiedDemand[route->getTypeIndex()] <= 0) {
-            stopCritera = true;
+            return i;
         }
     }
 }
 
-void AddNodes::movement(Solution *solution){
-//    cout << endl << "AddNodes:" << endl;
-    this->fix = true;
-    for(Route *route: solution->routes) { // agregar todos los que beneficien
-        this->benefitOnly= true;
-        nodeAdding(route, solution);
-    }
-    for (int i = 0; i < solution->unsatisfiedDemand.size(); ++i) { //agrega los que no benefician para satisfacer
-        if (solution->unsatisfiedDemand[i] > 0) {
-            int j = i;
-            while (solution->unsatisfiedDemand[i] > 0){
-                for(Route *route: solution->routes) {
-                    if(route->getTypeIndex() == j){
-                        this->benefitOnly = false;
-                        nodeAdding(route, solution);
-                    }
-                }
-                j--;
-                if(j < 0 and solution->unsatisfiedDemand[i] > 0){ // no se pudo arreglar
-                    cout << "no Fix" << endl;
 
-                    this->fix = false;
-                    break;
-                }
+void AddNodes::nodeAdding(Route *route, Solution *solution) {
+    cout << "node adding" << endl;
+    cout << route->getId() << endl;
+    cout << route->isFull() << endl;
+    while (!route->isFull()) { // agrega nodos mientras existan vecinos.
+        cout << "current route " << route->getId() << endl;
+        Trip *selectedPlace = roulette(route);
+        Trip *selectedTrip = getBestOption(selectedPlace, route, solution);
+        double delta = selectedTrip->benefit; //TODO considera la mejor opcion de leche -la del camion, no lo que realmente sera tras el blending
+        cout << "delta" << endl;
+        cout << delta << endl;
+        if (delta > 0) {
+            solution->insertTrip(route, getInsertPosition(route, selectedTrip), selectedTrip->finalNode);
+            solution->updateSolution(selectedTrip->finalNode, true);
+            cout << "->added node " << selectedTrip->finalNode->getId() << " P: " << selectedTrip->finalNode->getProduction() << " D: "
+                 << selectedTrip->distance << " to route " << route->getId() << endl;//TODO es ese?
+        } else {
+            double r = (double) (rand() % 101) / 100.0;
+            double pEval = exp(delta / 100.0);
+            cout << "delta < 0" << endl;
+            cout << pEval << endl;
+            cout << r << endl;
+            if (pEval > r) {
+                solution->insertTrip(route, getInsertPosition(route, selectedTrip), selectedTrip->finalNode);
+                solution->updateSolution(selectedTrip->finalNode, true);
+                cout << "->added node (NO BEN) " << selectedTrip->finalNode->getId() << " P: " << selectedTrip->finalNode->getProduction() << " D: "
+                     << selectedTrip->distance << " to route " << route->getId() << endl; //TODO es ese?
+//                route->printTrips();
+            } else {
+                cout << "no se agrega nada" << endl;
             }
         }
+        solution->resetRouteFull();
+        this->unfilledRoutes = solution->getUnfilledRoutes();
+        if(this->unfilledRoutes.empty()){
+            this->stopCriteria = true;
+        }
+        else{
+            this->currentRoute = this->unfilledRoutes[0];
+        }
+        cout << "actualizado " << this->unfilledRoutes.size() << endl;
+        for(Route *r: this->unfilledRoutes){
+            cout << r->getId() << endl;
+        }
     }
 }
+
+
+void AddNodes::movement(Solution *solution) {
+//    cout << endl << "AddNodes:" << endl;
+    this->fix = true;
+    this->currentRoute = nullptr;
+    this->unfilledRoutes = solution->getUnfilledRoutes();
+    for(Route *r: this->unfilledRoutes){
+        cout << r->getId() << endl;
+    }
+    this->stopCriteria = true;
+    if(!this->unfilledRoutes.empty()){
+        this->currentRoute = this->unfilledRoutes[0];
+        this->stopCriteria = false;
+    }
+    while(!this->stopCriteria){
+        nodeAdding(this->currentRoute, solution);
+    }
+    if (solution->getUnsatisfiedType() != -1) {
+        this->fix = false;
+    }
+
+//    while (!this->unfilledRoutes.empty()) {
+//        for (Route *route: this->unfilledRoutes) { // agregar todos los que beneficien
+//            cout << "route" << route->getId() << endl;
+//            nodeAdding(route, solution);
+//            cout << "despues de node adding" << endl;
+//        }
+//        if (solution->getUnsatisfiedType() != -1) {
+//            this->fix = false;
+//        }
+//        else{
+//            cout << "fix " << solution->getUnsatisfiedType() << endl;
+//        }
+//    }
+} //TODO cuando se acaban las opciones, unfilledRoutes es empty

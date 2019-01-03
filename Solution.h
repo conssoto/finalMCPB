@@ -27,6 +27,8 @@ public:
     double kilometerCost;
     vector<bool> parameters;
 
+    int Temperature;
+
 public:
     explicit Solution(ProblemInstance *problemInstance, vector<bool> parameters);
     ~Solution();
@@ -37,6 +39,7 @@ public:
     void resetSolution(const Solution &s2);
     void updateDemands(int currentTypeIndex, Node *currentNode, Route *currentRoute, int production, bool repairing);
     void resetDemands();
+    void resetRouteFull();
 
     void setQualities(double size);
 
@@ -70,4 +73,5 @@ public:
     void printAll();
     void printSolution();
     vector<int> convertMilk();
+
 };

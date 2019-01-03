@@ -38,6 +38,10 @@ bool Route::isFull(){ return this->full; }
 
 void Route::setFull() { this->full = true; }
 
+bool Route::fitsInTruck(Node *node){
+    return this->remainingCapacity >= node->getProduction();
+}
+
 
 void Route::printAll() {
     double aux(0);

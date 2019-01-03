@@ -27,8 +27,6 @@ public:
     void setNeighborhood(Solution *solution, bool repairing);
     void setTotalProduction();
 
-    bool fitsInTruck(Route *route, Node *node);
-
     void deleteNeighborhood();
     vector<Trip *> getOptions(Solution *solution, int currentType, Node *currentNode, bool resize);
     Trip *roulette();

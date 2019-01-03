@@ -12,10 +12,6 @@ Construction::~Construction(){
     this->neighborhood.shrink_to_fit(); //TODO borrar la ruta??
 }
 
-bool Construction::fitsInTruck(Route *route, Node *node){
-    return route->remainingCapacity >= node->getProduction();
-}
-
 void Construction::deleteNeighborhood(){
     for (Trip *trip:this->neighborhood) {
         delete trip;
@@ -28,7 +24,7 @@ vector<Trip *> Construction::getOptions(Solution *solution, int currentType, Nod
     vector<Trip *> options;
     for (int i = 0; i < solution->nodesXQuality[currentType - 1]; ++i) {
         Node *option = solution->unvisitedNodes[i];
-        if (fitsInTruck(solution->routes.back(), option)) {
+        if (solution->routes.back()->fitsInTruck(option)) {
             options.push_back(solution->newTrip(currentNode, option, solution->routes.back()));
         }
     }

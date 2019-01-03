@@ -54,50 +54,60 @@ int main() {
         lastSolution->resetSolution(*currentSolution);
         cout<<  "initial" << currentSolution->getTotalBenefit() << endl;
 //        cout <<  "\tbest" << bestSolution->getTotalBenefit()<< endl;
-
-        if(construction->construct){
-            for (int i =0 ; i <150 ; ++i){
-                cout << "----------------iter " << i << endl;
-
-                cout << "antes" << currentSolution->getTotalBenefit() << endl;
-
-                removeNodes->breakDemands(currentSolution);
-                cout << "dsp break" << currentSolution->getTotalBenefit() << endl;
-
-//                addNodes->setTabuList(removeNodes->tabuList);
-                addNodes->setTabuList({});
-
-
-                addNodes->movement(currentSolution);
-                cout << "dsp add" << currentSolution->getTotalBenefit() << endl;
-
-                if(addNodes->fix) {
-                    removeNodes->movement(currentSolution);
-                    cout << "dsp remove" << currentSolution->getTotalBenefit() << endl;
-
-                    reorderNodes->movement(currentSolution);
-                    cout << "dsp reorder" << currentSolution->getTotalBenefit() << endl;
-
-                    cout << "best" << bestSolution->getTotalBenefit() << endl;
-                    fix++;
-                    if (currentSolution->getTotalBenefit() > bestSolution->getTotalBenefit()) {
-                        bestSolution->resetSolution(*currentSolution);
-                        cout << "new best " << bestSolution->getTotalBenefit() << endl;
-                        better++;
-                    } else {
-                        cout << "No ben " << currentSolution->getTotalBenefit() << endl;
-                        nobetter++;
-                    }
-                    lastSolution->resetSolution(*currentSolution);
-                }
-
-                else{
-                    nofix++;
-                    cout << "vuelve atras" << endl;
-                    currentSolution->resetSolution(*lastSolution);
-                }
-            }
+        for (Route *r:currentSolution->routes){
+            cout << r->trips[0]->finalNode->getId() << endl;
         }
+        cout << "construction" << construction->construct << endl;
+
+//        if(construction->construct){
+//            for (int i =0 ; i <150 ; ++i){
+//                cout << "----------------iter " << i << endl;
+//
+//                cout << "antes" << currentSolution->getTotalBenefit() << endl;
+//
+        removeNodes->breakDemands(currentSolution);
+        cout << "dsp break" << currentSolution->getTotalBenefit() << endl;
+//
+////                addNodes->setTabuList(removeNodes->tabuList);
+//        addNodes->setTabuList({});
+//
+        currentSolution->printAll();
+        addNodes->movement(currentSolution);
+        cout << "dsp add" << currentSolution->getTotalBenefit() << endl;
+        if(addNodes->fix) {
+            cout << "FIX!" << endl;
+        }
+        else {
+            cout << "no fix" << endl;
+        }
+//
+//                if(addNodes->fix) {
+//                    removeNodes->movement(currentSolution);
+//                    cout << "dsp remove" << currentSolution->getTotalBenefit() << endl;
+//
+//                    reorderNodes->movement(currentSolution);
+//                    cout << "dsp reorder" << currentSolution->getTotalBenefit() << endl;
+//
+//                    cout << "best" << bestSolution->getTotalBenefit() << endl;
+//                    fix++;
+//                    if (currentSolution->getTotalBenefit() > bestSolution->getTotalBenefit()) {
+//                        bestSolution->resetSolution(*currentSolution);
+//                        cout << "new best " << bestSolution->getTotalBenefit() << endl;
+//                        better++;
+//                    } else {
+//                        cout << "No ben " << currentSolution->getTotalBenefit() << endl;
+//                        nobetter++;
+//                    }
+//                    lastSolution->resetSolution(*currentSolution);
+//                }
+//
+//                else{
+//                    nofix++;
+//                    cout << "vuelve atras" << endl;
+//                    currentSolution->resetSolution(*lastSolution);
+//                }
+//            }
+//        }
 
         delete currentSolution;
 
@@ -105,39 +115,39 @@ int main() {
 
 //    currentSolution->printAll();
 
-    cout << "ben " << bestSolution->getTotalBenefit() << " better " << better << endl;
-    bestSolution->printAll();
-
-    bestSolution->printSolution();
-
-    cout << "better " << better << endl;
-    cout << "fix " << fix << endl;
-    cout << "no better " << nobetter<< endl;
-    cout << "no fix " << nofix << endl;
-
-    vector<int> checklist;
-    for(Route *ro:bestSolution->routes){
-        for(Trip *t: ro->trips){
-            if(t->finalNode->getId() != 0){
-                checklist.push_back(t->finalNode->getId());
-            }
-        }
-    }
-    int no(0);
-    for (int i: NODES_6){
-        if (!(find(checklist.begin(), checklist.end(), i) != checklist.end())){ // true si esta presente
-            no++;
-        }
-    }
-    cout << "faltan " << no << " nodos"<< endl;
-    if(checklist.size() > NODES_6.size()){
-        cout << "sobran " << checklist.size() - NODES_6.size() << " nodos" << endl;
-    }
-
+//    cout << "ben " << bestSolution->getTotalBenefit() << " better " << better << endl;
+//    bestSolution->printAll();
+//
+//    bestSolution->printSolution();
+//
+//    cout << "better " << better << endl;
+//    cout << "fix " << fix << endl;
+//    cout << "no better " << nobetter<< endl;
+//    cout << "no fix " << nofix << endl;
+//
+//    vector<int> checklist;
+//    for(Route *ro:bestSolution->routes){
+//        for(Trip *t: ro->trips){
+//            if(t->finalNode->getId() != 0){
+//                checklist.push_back(t->finalNode->getId());
+//            }
+//        }
+//    }
+//    int no(0);
+//    for (int i: NODES_6){
+//        if (!(find(checklist.begin(), checklist.end(), i) != checklist.end())){ // true si esta presente
+//            no++;
+//        }
+//    }
+//    cout << "faltan " << no << " nodos"<< endl;
+//    if(checklist.size() > NODES_6.size()){
+//        cout << "sobran " << checklist.size() - NODES_6.size() << " nodos" << endl;
+//    }
+//
     delete removeNodes;
-    delete reorderNodes;
-    delete lastSolution;
-    delete bestSolution;
+//    delete reorderNodes;
+//    delete lastSolution;
+//    delete bestSolution;
     delete problemInstance;
 
     return 0;
