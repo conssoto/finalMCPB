@@ -20,47 +20,62 @@ int RemoveNodes::getCuttingDemand(int typeIndex, Solution *solution) {
     return minDemand;
 }
 
+double RemoveNodes::getDeletableBenefit(Trip *deletableTrip, Trip *nextTrip, Route *route, Solution *solution) {
+    double deletableProd(
+            solution->literCost[route->getTypeIndex()] *
+            deletableTrip->finalNode->getProduction());
+    double deletableDistance(solution->kilometerCost * (deletableTrip->distance + nextTrip->distance));
+    double newDistance(solution->kilometerCost *
+                       (solution->problemInstance->getDistance(deletableTrip->initialNode,
+                                                               nextTrip->finalNode)));
+    return -(deletableProd - deletableDistance + newDistance); //sacarlo implica esto
+}
+
 void RemoveNodes::setDeletable(Route *route, Solution *solution) {
     this->deletableTripsIndex.clear();
     this->benefits.clear();
+    double cuttingDemand(getCuttingDemand(route->getTypeIndex(), solution));
     for (int i = 0; i < route->trips.size() - 1; ++i) {
         Trip *deletableTrip = route->trips[i];
-        double cuttingDemand(getCuttingDemand(route->getTypeIndex(), solution));
         if (cuttingDemand < 0 and deletableTrip->finalNode->getProduction() < -cuttingDemand) {
             Trip *nextTrip = route->trips[i + 1];
-            double deletableProd(
-                    solution->literCost[deletableTrip->finalNode->getTypeIndex()] *
-                    deletableTrip->finalNode->getProduction());
-            double deletableDistance(solution->kilometerCost * (deletableTrip->distance + nextTrip->distance));
-            double newDistance(solution->kilometerCost *
-                               (solution->problemInstance->getDistance(deletableTrip->initialNode,
-                                                                             nextTrip->finalNode)));
-            if (deletableProd - deletableDistance < -newDistance) {
-                this->deletableTripsIndex.push_back(i);
-                this->benefits.push_back(-deletableProd + deletableDistance - newDistance);
+            double deletableBenefit = getDeletableBenefit(deletableTrip, nextTrip, route, solution);
+            if(deletableBenefit > 0.0){
+                this->deletableTripsIndex.push_back(i); //beneficio de sacarlo
+                this->benefits.push_back(deletableBenefit); // >0 conviene sacarlo
             }
         }
-//        }
     }
 }
 
-void RemoveNodes::breakDemands(Solution *solution) { // hasta rom,per alguna, no se quita en todas las rutas
+void RemoveNodes::breakDemands(Solution *solution) { // hasta romper alguna, no se quita en todas las rutas
 //    cout << endl << "Break Demands:" << endl;
     this->tabuList.clear();
     bool stopCritera(false);
     while (!stopCritera) {
-        int deleteRouteIndex = (rand() % (int)(solution->routes.size()-1)); // cualquier ruta
+        int deleteRouteIndex = solution->random_int_number(0, (int)solution->routes.size()-1); // size-1 es el index
         Route *route(solution->routes[deleteRouteIndex]);
         int deleteTripIndex(0);
-        if (route->trips.size() != 2) {
-            deleteTripIndex = (rand() % (int)(route->trips.size()-2)); // cualquier trip menos el ultimo
-        }
-        if (route->trips[deleteTripIndex]->finalNode != solution->plant) {
+        deleteTripIndex = solution->random_int_number(0, (int)route->trips.size()-2);// cualquier trip menos el ultimo
+        double delta = getDeletableBenefit(route->trips[deleteTripIndex], route->trips[deleteTripIndex+1], route, solution);
+        if (delta > 0) { // si sacarlo genera un beneficio, se elimina.
             cout << "->break node " << route->trips[deleteTripIndex]->finalNode->getId() << " P: " << route->trips[deleteTripIndex]->finalNode->getProduction() << " D: " << route->trips[deleteTripIndex]->distance << " T: " << route->trips[deleteTripIndex]->finalNode->getType() << endl;
             this->tabuList.push_back(route->trips[deleteTripIndex]->finalNode);
             solution->updateSolution(route->trips[deleteTripIndex]->finalNode, false);
             solution->removeTrip(deleteTripIndex, route);
             solution->resetDemands();
+        }else {
+            double r = solution->random_number(0.0, 1.0);
+            double pEval = exp(delta / 100.0);
+            if (pEval > r) {
+                cout << "->break node (NO BEN) " << route->trips[deleteTripIndex]->finalNode->getId() << " P: " << route->trips[deleteTripIndex]->finalNode->getProduction() << " D: " << route->trips[deleteTripIndex]->distance << " T: " << route->trips[deleteTripIndex]->finalNode->getType() << endl;
+                this->tabuList.push_back(route->trips[deleteTripIndex]->finalNode);
+                solution->updateSolution(route->trips[deleteTripIndex]->finalNode, false);
+                solution->removeTrip(deleteTripIndex, route);
+                solution->resetDemands();
+            } else {
+                cout << "no se agrega nada" << endl;
+            }
         }
         for (int d: solution->unsatisfiedDemand) { //si rompe alguna, para.
             if (d > 0) {
@@ -79,7 +94,7 @@ void RemoveNodes::movement(Solution *solution){
         while(!stopCritera){ // mientras tenga nodos que sacar, saca
             setDeletable(route, solution); //si no esta vacio
             if (!this->benefits.empty()){
-                int selectedIndex = roulette();
+                int selectedIndex = roulette(solution);
                 int deleteIndex(this->deletableTripsIndex[selectedIndex]);
                 cout << "->deleted node " << route->trips[deleteIndex]->finalNode->getId() << " P: " << route->trips[deleteIndex]->finalNode->getProduction() << " D: " << route->trips[deleteIndex]->distance << " T: " << route->trips[deleteIndex]->finalNode->getType() <<  endl;
                 solution->updateSolution(route->trips[deleteIndex]->finalNode, false);
@@ -100,15 +115,15 @@ void RemoveNodes::setTotalBenefit(){
     }
 }
 
-int RemoveNodes::roulette() {
+int RemoveNodes::roulette(Solution *solution) {
     setTotalBenefit();
-    int beta = rand() % 101;
-    double choiceProbability(0);
+    double beta = solution->random_number(0.0, 100.0);
+    double choiceProbability(0.0);
     for ( int i =0 ; i < this->benefits.size() ; ++i) {
-        if (beta > stoi(to_string(choiceProbability))) {
+        if (beta > choiceProbability) {
             choiceProbability += this->benefits[i] * 100.0 / this->totalBenefit;
         }
-        if ((beta <= stoi(to_string(choiceProbability))) or (stoi(to_string(choiceProbability)) == 100)) {
+        if ((beta <= choiceProbability) or (stoi(to_string(choiceProbability)) == 100)) {
             return i;
         }
     }

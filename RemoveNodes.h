@@ -24,8 +24,9 @@ public:
     void setTotalBenefit();
 
     int getCuttingDemand(int typeIndex, Solution *solution);
+    double getDeletableBenefit(Trip *deletableTrip, Trip *nextTrip, Route *route, Solution *solution);
 
-    int roulette();
+    int roulette(Solution *solution);
     void breakDemands(Solution *solution);
     void movement(Solution *solution);
 };

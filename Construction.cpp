@@ -87,18 +87,18 @@ void Construction::setTotalProduction(){
     }
 }
 
-Trip *Construction::roulette() {
+Trip *Construction::roulette(Solution *solution) {
     setTotalProduction();
     if (this->totalProduction == 0) { //volver a la planta
         return this->neighborhood[0];
     }
-    int beta = rand() % 101;
+    double beta = solution->random_number(0, 100);
     double choiceProbability(0);
     for (Trip *trip: this->neighborhood) {
-        if (beta > stoi(to_string(choiceProbability))) {
+        if (beta > choiceProbability) {
             choiceProbability += trip->finalNode->getProduction() * 100.0 / this->totalProduction;
         }
-        if ((beta <= stoi(to_string(choiceProbability))) or (stoi(to_string(choiceProbability))==100)) { //TODO eliminar los trips no hacerlo aca, hacerlo cuando termine la iteracion
+        if ((beta <= choiceProbability) or (stoi(to_string(choiceProbability))==100)) { //TODO eliminar los trips no hacerlo aca, hacerlo cuando termine la iteracion
             auto *selectedTrip = new Trip(*trip);
             deleteNeighborhood();
             return selectedTrip;
@@ -120,7 +120,7 @@ void Construction::feasibleSolution(Solution *solution) {
 //    cout << endl << "----FASE 1----" << endl;
     while (solution->getUnsatisfiedType() != -1) {
         setNeighborhood(solution, false);
-        Trip *selectedTrip = roulette();
+        Trip *selectedTrip = roulette(solution);
         if (this->currentRoute->trips.empty()){
 
         }
@@ -140,7 +140,7 @@ void Construction::feasibleSolution(Solution *solution) {
     while (solution->getUnsatisfiedType() != -1) {
         setNeighborhood(solution, true);
         if(construct){
-            Trip *selectedTrip = roulette();
+            Trip *selectedTrip = roulette(solution);
             solution->addTrip(selectedTrip, this->currentRoute);
             solution->stepUpdateSolution(selectedTrip, this->currentRoute, true);
         }

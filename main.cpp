@@ -1,4 +1,5 @@
 #include <iostream>
+#include <random>
 #include "ProblemInstance.h"
 #include "Solution.h"
 #include "Reader.h"
@@ -17,6 +18,7 @@ vector<int> NODES_5 = {37, 40, 22, 25, 28, 27, 10, 7, 8, 5, 4, 11, 32, 35, 26, 2
 vector<int> NODES_6 = {22, 4, 1, 13, 40, 28, 26, 25, 20, 23, 11, 32, 35, 29, 31, 2, 5, 8, 7, 10};
 
 
+
 int main() {
 //    cout << "Enter instance number: ";
 //    cin.getline(instanceOption, 3);
@@ -24,6 +26,7 @@ int main() {
 
     Reader r("6");
     srand(1);
+
 
     ProblemInstance *problemInstance;
 
@@ -42,7 +45,7 @@ int main() {
     int nofix(0);
     int fix(0);
 
-    for (int j =0 ; j <700 ; ++j){
+    for (int j =0 ; j <50 ; ++j){
         cout << "----------------reset " << j << endl;
 
         auto *currentSolution = new Solution(problemInstance, PARAMETERS);
@@ -59,95 +62,87 @@ int main() {
         }
         cout << "construction" << construction->construct << endl;
 
-//        if(construction->construct){
-//            for (int i =0 ; i <150 ; ++i){
-//                cout << "----------------iter " << i << endl;
-//
-//                cout << "antes" << currentSolution->getTotalBenefit() << endl;
-//
-        removeNodes->breakDemands(currentSolution);
-        cout << "dsp break" << currentSolution->getTotalBenefit() << endl;
-//
-////                addNodes->setTabuList(removeNodes->tabuList);
-//        addNodes->setTabuList({});
-//
-        currentSolution->printAll();
-        addNodes->movement(currentSolution);
-        cout << "dsp add" << currentSolution->getTotalBenefit() << endl;
-        if(addNodes->fix) {
-            cout << "FIX!" << endl;
+        if(construction->construct){
+            for (int i =0 ; i <150 ; ++i){
+                cout << "----------------iter " << i << endl;
+
+                cout << "antes" << currentSolution->getTotalBenefit() << endl;
+
+                removeNodes->breakDemands(currentSolution);
+                cout << "dsp break" << currentSolution->getTotalBenefit() << endl;
+
+//                addNodes->setTabuList(removeNodes->tabuList);
+//                addNodes->setTabuList({});
+
+                currentSolution->printAll();
+                addNodes->movement(currentSolution);
+                cout << "dsp add" << currentSolution->getTotalBenefit() << endl;
+
+                if(addNodes->fix) {
+                    removeNodes->movement(currentSolution);
+                    cout << "dsp remove" << currentSolution->getTotalBenefit() << endl;
+
+                    reorderNodes->movement(currentSolution);
+                    cout << "dsp reorder" << currentSolution->getTotalBenefit() << endl;
+
+                    cout << "best" << bestSolution->getTotalBenefit() << endl;
+                    fix++;
+                    if (currentSolution->getTotalBenefit() > bestSolution->getTotalBenefit()) {
+                        bestSolution->resetSolution(*currentSolution);
+                        cout << "new best " << bestSolution->getTotalBenefit() << endl;
+                        better++;
+                    } else {
+                        cout << "No ben " << currentSolution->getTotalBenefit() << endl;
+                        nobetter++;
+                    }
+                    lastSolution->resetSolution(*currentSolution);
+                }
+
+                else{
+                    nofix++;
+                    cout << "vuelve atras" << endl;
+                    currentSolution->resetSolution(*lastSolution);
+                }
+            }
         }
-        else {
-            cout << "no fix" << endl;
-        }
-//
-//                if(addNodes->fix) {
-//                    removeNodes->movement(currentSolution);
-//                    cout << "dsp remove" << currentSolution->getTotalBenefit() << endl;
-//
-//                    reorderNodes->movement(currentSolution);
-//                    cout << "dsp reorder" << currentSolution->getTotalBenefit() << endl;
-//
-//                    cout << "best" << bestSolution->getTotalBenefit() << endl;
-//                    fix++;
-//                    if (currentSolution->getTotalBenefit() > bestSolution->getTotalBenefit()) {
-//                        bestSolution->resetSolution(*currentSolution);
-//                        cout << "new best " << bestSolution->getTotalBenefit() << endl;
-//                        better++;
-//                    } else {
-//                        cout << "No ben " << currentSolution->getTotalBenefit() << endl;
-//                        nobetter++;
-//                    }
-//                    lastSolution->resetSolution(*currentSolution);
-//                }
-//
-//                else{
-//                    nofix++;
-//                    cout << "vuelve atras" << endl;
-//                    currentSolution->resetSolution(*lastSolution);
-//                }
-//            }
-//        }
 
         delete currentSolution;
 
     }
 
-//    currentSolution->printAll();
+    cout << "ben " << bestSolution->getTotalBenefit() << " better " << better << endl;
+    bestSolution->printAll();
 
-//    cout << "ben " << bestSolution->getTotalBenefit() << " better " << better << endl;
-//    bestSolution->printAll();
-//
-//    bestSolution->printSolution();
-//
-//    cout << "better " << better << endl;
-//    cout << "fix " << fix << endl;
-//    cout << "no better " << nobetter<< endl;
-//    cout << "no fix " << nofix << endl;
-//
-//    vector<int> checklist;
-//    for(Route *ro:bestSolution->routes){
-//        for(Trip *t: ro->trips){
-//            if(t->finalNode->getId() != 0){
-//                checklist.push_back(t->finalNode->getId());
-//            }
-//        }
-//    }
-//    int no(0);
-//    for (int i: NODES_6){
-//        if (!(find(checklist.begin(), checklist.end(), i) != checklist.end())){ // true si esta presente
-//            no++;
-//        }
-//    }
-//    cout << "faltan " << no << " nodos"<< endl;
-//    if(checklist.size() > NODES_6.size()){
-//        cout << "sobran " << checklist.size() - NODES_6.size() << " nodos" << endl;
-//    }
-//
+    bestSolution->printSolution();
+
+    cout << "better " << better << endl;
+    cout << "fix " << fix << endl;
+    cout << "no better " << nobetter<< endl;
+    cout << "no fix " << nofix << endl;
+
+    vector<int> checklist;
+    for(Route *ro:bestSolution->routes){
+        for(Trip *t: ro->trips){
+            if(t->finalNode->getId() != 0){
+                checklist.push_back(t->finalNode->getId());
+            }
+        }
+    }
+    int no(0);
+    for (int i: NODES_6){
+        if (!(find(checklist.begin(), checklist.end(), i) != checklist.end())){ // true si esta presente
+            no++;
+        }
+    }
+    cout << "faltan " << no << " nodos"<< endl;
+    if(checklist.size() > NODES_6.size()){
+        cout << "sobran " << checklist.size() - NODES_6.size() << " nodos" << endl;
+    }
+
     delete removeNodes;
-//    delete reorderNodes;
-//    delete lastSolution;
-//    delete bestSolution;
+    delete reorderNodes;
+    delete lastSolution;
+    delete bestSolution;
     delete problemInstance;
 
     return 0;

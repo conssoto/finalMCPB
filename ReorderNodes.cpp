@@ -30,8 +30,7 @@ void ReorderNodes::movement(Solution *solution) {
 //    cout << endl <<  "ReorderNodes: " << endl;
     for (Route *route: solution->routes) {
         if(this->randomIterations){
-            cout << "aaca" << endl;
-            int i = rand() % int(route->trips.size());
+            int i = solution->random_int_number(0, (int)route->trips.size()-1);
             removeTrip(i, route, solution);
             setBest(route, solution->problemInstance);
             solution->insertTrip(route, this->bestIndex, this->node);

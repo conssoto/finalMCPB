@@ -126,6 +126,36 @@ void Solution::resetSolution(const Solution &s2) {
     }
 }
 
+double Solution::random_number(double min, double max){
+    thread_local static mt19937 mt(1008);
+    thread_local static uniform_real_distribution<double> dist;
+    using pick = uniform_real_distribution<double>::param_type;
+    return dist(mt, pick(min, max));
+}
+
+int Solution::random_int_number(int min, int max){
+    thread_local static mt19937 mt(1008);
+    thread_local static uniform_int_distribution<int> dist;
+    using pick = uniform_int_distribution<int>::param_type;
+    return dist(mt, pick(min, max));
+}
+
+int Solution::getBlendingType(int currentRouteTypeIndex) {
+    int unsatisfiedTypeIndex(-1);
+    for (int i =  currentRouteTypeIndex ; i < this->unsatisfiedDemand.size() ; ++i) {
+        if (this->unsatisfiedDemand[i] > 0) {
+            unsatisfiedTypeIndex = i;
+            break;
+        }
+    }
+    if (unsatisfiedTypeIndex != -1) {
+        if (unsatisfiedTypeIndex >= currentRouteTypeIndex) {
+            return unsatisfiedTypeIndex;
+        }
+    }
+    return currentRouteTypeIndex; //es el tipo actual si no hay unsatisfiedDemand o este es mayor que el tipo de la ruta
+}
+
 double Solution::getTotalBenefit() {
     double totalBenefit(0);
     for (Route *route: this->routes) {
@@ -203,7 +233,7 @@ void Solution::insertTrip(Route *route, int index, Node *node) {
 }
 
 double Solution::calculateBenefit(Trip *trip, int typeIndex) { //TODO no es el beneficio
-    return this->literCost[typeIndex] * trip->finalNode->getProduction() -
+    return this->literCost[getBlendingType(typeIndex)] * trip->finalNode->getProduction() -
            this->kilometerCost * trip->distance;
 }
 
@@ -366,7 +396,6 @@ void Solution::resetRouteFull() {
                 r->full = false;
             }
         }
-        cout << "route " << r->getId() << " is " << r->isFull() << endl;
     }
 }
 

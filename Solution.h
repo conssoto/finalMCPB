@@ -1,11 +1,12 @@
 #pragma once
+#include <iostream>
+#include <random>
+#include <numeric>
 #include <vector>
 #include "Truck.h"
 #include "Node.h"
 #include "ProblemInstance.h"
 #include "Route.h"
-#include <iostream>
-#include <numeric>
 
 using namespace std;
 
@@ -34,13 +35,16 @@ public:
     ~Solution();
     Solution(const Solution &s2);
 
+    double random_number(double min, double max);
+    int random_int_number(int min, int max);
+
+
     void stepUpdateSolution(Trip *trip, Route *route, bool repairing);
     void updateSolution(Node *node, bool add);
     void resetSolution(const Solution &s2);
     void updateDemands(int currentTypeIndex, Node *currentNode, Route *currentRoute, int production, bool repairing);
     void resetDemands();
     void resetRouteFull();
-
     void setQualities(double size);
 
     void addTruck(Truck *truck);
@@ -62,6 +66,7 @@ public:
     double getTotalBenefit();
     int getDemandSubtraction(int dda, int prod);
     char getType(int i);
+    int getBlendingType(int currentRouteType);
 
     void removeTruck(Truck *truck);
     void removeNode(Node *node);

@@ -1,29 +1,28 @@
 #pragma once
 #include <vector>
+#include <iostream>
+#include <numeric>
+#include <cmath>
+#include <random>
 #include "Truck.h"
 #include "Node.h"
 #include "ProblemInstance.h"
 #include "Route.h"
 #include "Solution.h"
-#include <iostream>
-#include <numeric>
-#include <cmath>
 
 class AddNodes {
 public:
-    vector<bool> neighborhood;
-    int insertPosition;
-    int currentType;
-    bool fix;
     vector <Route *> unfilledRoutes;
     Route *currentRoute;
+    int currentType;
+    bool fix;
     bool stopCriteria;
 
 public:
     explicit AddNodes();
     ~AddNodes();
 
-    Trip *roulette(Route *route);
+    Trip *roulette(Route *route, Solution *solution);
     Trip *getBestOption(Trip *trip, Route *route, Solution *solution);
     int getInsertPosition(Route *route, Trip *selectedTrip);
 
