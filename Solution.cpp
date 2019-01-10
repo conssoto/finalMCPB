@@ -27,6 +27,8 @@ Solution::Solution(ProblemInstance *problemInstance, vector<bool> parameters){
     this->literCost = {0.03, 0.021, 0.009};
     this->kilometerCost = 1;
     this->parameters = parameters;
+
+    this->temperature = problemInstance->temperature;
 }
 
 Solution::~Solution() {
@@ -91,6 +93,8 @@ Solution::Solution(const Solution &s2){
     plant = new Node(0, 0, 0);
     literCost = s2.literCost;
     kilometerCost = s2.kilometerCost;
+
+    temperature = s2.temperature;
 }
 
 void Solution::resetSolution(const Solution &s2) {
@@ -124,6 +128,7 @@ void Solution::resetSolution(const Solution &s2) {
         Route *copy = new Route(*route);
         this->routes.push_back(copy);
     }
+    this->temperature = s2.temperature;
 }
 
 double Solution::random_number(double min, double max){
@@ -141,13 +146,7 @@ int Solution::random_int_number(int min, int max){
 }
 
 int Solution::getBlendingType(int currentRouteTypeIndex) {
-    int unsatisfiedTypeIndex(-1);
-    for (int i =  currentRouteTypeIndex ; i < this->unsatisfiedDemand.size() ; ++i) {
-        if (this->unsatisfiedDemand[i] > 0) {
-            unsatisfiedTypeIndex = i;
-            break;
-        }
-    }
+    int unsatisfiedTypeIndex(getUnsatisfiedType(currentRouteTypeIndex));
     if (unsatisfiedTypeIndex != -1) {
         if (unsatisfiedTypeIndex >= currentRouteTypeIndex) {
             return unsatisfiedTypeIndex;
@@ -157,20 +156,24 @@ int Solution::getBlendingType(int currentRouteTypeIndex) {
 }
 
 double Solution::getTotalBenefit() {
-    double totalBenefit(0);
-    for (Route *route: this->routes) {
-        for (Trip *trip: route->trips) {
-            totalBenefit += trip->benefit;
-        }
+    double totalDistance(0);
+    for (Route *r: this->routes) {
+        totalDistance += r->distance;
     }
-    return totalBenefit;
+
+    vector<int> totalMilk = convertMilk(false);
+    reverse(totalMilk.begin(), totalMilk.end());
+
+    double suma(0);
+    for (int i = 0; i < totalMilk.size(); ++i) {
+        suma += totalMilk[i] * this->literCost[i];
+    }
+
+    return suma-totalDistance;
 }
 
 void Solution::setQualities(double size) {
-    vector<int> aux;
-    for (int i = 0; i < size; ++i) {
-        aux.push_back(0);
-    }
+    vector<int> aux(size, 0);
     for (Node *node: this->unvisitedNodes) {
         aux[node->getTypeIndex()]++;
     }
@@ -255,9 +258,19 @@ Trip *Solution::fakeTrip(Node *node1, Node *node2, Node *node3, Route *route) {
     return trip;
 }
 
-int Solution::getUnsatisfiedType() {
+int Solution::getCurrentType() { //TODO esta bien?
+
     if(this->unsatisfiedDemand.back() > 0){
         return this->routes.back()->getType();
+    }
+    return -1; //si el ultimo tipo ya se suplio, devuelve -1
+}
+
+int Solution::getUnsatisfiedType(int from) { //TODO esta bien?
+    for (int i = from ; i < this->unsatisfiedDemand.size() ; ++i) {
+        if (this->unsatisfiedDemand[i] > 0) {
+            return i;
+        }
     }
     return -1; //si el ultimo tipo ya se suplio, devuelve -1
 }
@@ -334,13 +347,7 @@ void Solution::addBackToPlant(int i, Node *currentNode, Route *currentRoute, boo
             Trip *toPlant = newTrip(currentNode, this->plant, currentRoute);
             currentRoute->distance += toPlant->distance;
             addTrip(toPlant, currentRoute);
-            int actual(-1);
-            for (int i = 0; i < this->unsatisfiedDemand.size(); ++i) {
-                if(this->unsatisfiedDemand[i]>0){
-                    actual = i;
-                    break;
-                }
-            }
+            int actual(getUnsatisfiedType(0));
             if ((!repairing) and (actual != -1)) { // nueva ruta para el tipo de dda no satisfecho
                 addRoute(actual+1);
             }
@@ -464,12 +471,8 @@ void Solution::printAll() {
     }
 
     double totalDistance(0);
-    double totalBenefit(0);
     for (Route *r: this->routes) {
         totalDistance += r->distance;
-        for (Trip *t: r->trips) {
-            totalBenefit += t->benefit;
-        }
     }
     cout << "Distance cost: " << this->kilometerCost * totalDistance << endl;
 
@@ -481,8 +484,7 @@ void Solution::printAll() {
     }
     cout << "Total Milk cost: " << suma << endl;
 
-    cout << "Total Benefit: " << totalBenefit << endl;
-    cout << "Total Benefit check: " << suma - this->kilometerCost * totalDistance << endl;
+    cout << "Total Benefit: " << to_string(getTotalBenefit())<< endl;
 
     for (Route *r: this->routes) {
         cout << endl;
@@ -502,7 +504,7 @@ char Solution::getType(int i){
     }
 }
 
-vector<int> Solution::convertMilk() {
+vector<int> Solution::convertMilk(bool print) {
     vector<int> inPlant;
     vector<int> recollectedMilk = this->recollected;
     vector<int> dda = this->problemInstance->qualities;
@@ -521,20 +523,26 @@ vector<int> Solution::convertMilk() {
                     int diff = recollectedMilk[j] - dda[i];
                     if (diff>=0){
                         if (i == j){
-                            cout << recollectedMilk[j] << " de leche " << getType(i) << " se usa como leche " << getType(j) << " en la planta" << endl;
+                            if(print){
+                                cout << recollectedMilk[j] << " de leche " << getType(i) << " se usa como leche " << getType(j) << " en la planta" << endl;
+                            }
                             totalMilk[j] += recollectedMilk[j];
                             recollectedMilk[j] = 0;
                             break;
                         }
                         else {
                             recollectedMilk[j] -= dda[i];
-                            cout << dda[i] << " de leche " << getType(j) << " se usa como leche " << getType(i) << " en la planta" << endl;
+                            if(print){
+                                cout << dda[i] << " de leche " << getType(j) << " se usa como leche " << getType(i) << " en la planta" << endl;
+                            }
                             totalMilk[i] += dda[i];
                             break;
                         }
                     }
                     else{
-                        cout << recollectedMilk[j] << " de leche " << getType(i) << " se usa como leche " << getType(j) << " en la planta" << endl;
+                        if(print){
+                            cout << recollectedMilk[j] << " de leche " << getType(i) << " se usa como leche " << getType(j) << " en la planta" << endl;
+                        }
                         totalMilk[j] += recollectedMilk[j];
                         recollectedMilk[j] -= dda[i];
                         dda[i] = -recollectedMilk[j];
@@ -576,25 +584,24 @@ void Solution::printSolution() {
     cout << endl;
 
     double totalDistance(0);
-    double totalBenefit(0);
     for (Route *r: this->routes) {
         totalDistance += r->distance;
-        for (Trip *t: r->trips) {
-            totalBenefit += t->benefit;
-        }
     }
 
-    cout << "recollected x quality: " << endl;
-    for (int i =1 ; i <=  this->recollected.size(); i++) {
-        cout << "En total llegan " << this->recollected[i-1] << " litros leche tipo " << i << " la planta" << endl;
-    }
-
+    vector<int> litersxtype(3, 0); //TODO a la mala el 3
     for (Route *r: this->routes) {
-        cout << (this->problemInstance->trucks[r->truck->getId() - 1]->getTotalCapacity() - r->remainingCapacity)
+        int liters = this->problemInstance->trucks[r->truck->getId() - 1]->getTotalCapacity() - r->remainingCapacity;
+        cout << liters
              << " litros de leche " << r->type << " llegan en Camion " << r->truck->getId() << endl;
+        litersxtype[r->truck->getId() - 1] += liters;
     }
 
-    vector<int> totalMilk = convertMilk();
+    for (int i =0 ; i < this->recollected.size(); i++) {
+        cout << "En total llegan " << litersxtype[i] << " litros leche tipo " << i << " la planta" << endl;
+    }
+    this->recollected = litersxtype; // en algun momento lo calcula mal
+
+    vector<int> totalMilk = convertMilk(true);
     reverse(totalMilk.begin(), totalMilk.end());
 
     double suma(0);
@@ -604,5 +611,7 @@ void Solution::printSolution() {
 
     cout << "COSTO_TPTE = " << totalDistance << endl;
     cout << "INGRESO_LECHE = " << to_string(suma) << endl;
+
+    cout << "F.O. = " << to_string(getTotalBenefit()) << endl;
 }
 

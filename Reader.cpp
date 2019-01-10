@@ -5,7 +5,7 @@ Reader::Reader(string option): filePath("Instances/instancia" + string(option) +
 Reader::~Reader() { cout << "Deleting File Reader" << endl; }
 
 
-ProblemInstance *Reader::readInputFile() {
+ProblemInstance *Reader::readInputFile(double temperature) {
     ProblemInstance *problemInstance;
 
     string filePath = this->filePath;
@@ -23,7 +23,7 @@ ProblemInstance *Reader::readInputFile() {
     vector<string> data;
 
     this->findDef("Nodos:=");
-    problemInstance = this->createInstance();
+    problemInstance = this->createInstance(temperature);
 
     this->findDef("Q:=");
     this->readTrucks(problemInstance);
@@ -51,7 +51,7 @@ void Reader::findDef(string def) {
     }
 }
 
-ProblemInstance *Reader::createInstance() {
+ProblemInstance *Reader::createInstance(double temperature) {
     string node;
     int matrix_size(1); //Considerando la planta
     input >> node;
@@ -62,7 +62,7 @@ ProblemInstance *Reader::createInstance() {
             break;
         }
     }
-    auto *problemInstance = new ProblemInstance(matrix_size); //genera el espacio para la matriz
+    auto *problemInstance = new ProblemInstance(matrix_size, temperature); //genera el espacio para la matriz
     return problemInstance;
 }
 

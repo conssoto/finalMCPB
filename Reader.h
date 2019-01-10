@@ -19,11 +19,11 @@ public:
     explicit Reader(string option);
     ~Reader();
 
-    ProblemInstance *readInputFile();
+    ProblemInstance *readInputFile(double temperature);
 
 private:
     void findDef(string def);
-    ProblemInstance *createInstance();
+    ProblemInstance *createInstance(double temperature);
 
     void readTrucks(ProblemInstance *problemInstance);
     void readQuality(ProblemInstance *problemInstance);

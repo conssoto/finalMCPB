@@ -22,9 +22,11 @@ public:
     explicit AddNodes();
     ~AddNodes();
 
-    Trip *roulette(Route *route, Solution *solution);
     Trip *getBestOption(Trip *trip, Route *route, Solution *solution);
     int getInsertPosition(Route *route, Trip *selectedTrip);
+
+    Trip *roulette(Route *route, Solution *solution);
+    void changeRouteType(Route *route, Solution *solution);
 
     void deleteOptions(vector<Trip *> options);
 

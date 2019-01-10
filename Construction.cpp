@@ -61,7 +61,7 @@ void Construction::setNeighborhood(Solution *solution, bool repairing) {
     else{
         this->currentNode = solution->getCurrentNode();
         this->currentRoute = solution->routes.back();
-        this->currentType = solution->getUnsatisfiedType();
+        this->currentType = solution->getCurrentType();
 
         //si volvio a la planta, por que ya se lleno el camion, se crea nueva ruta.
         if (this->currentNode == solution->plant && !this->currentRoute->trips.empty()) {
@@ -117,8 +117,9 @@ void Construction::updateIds(vector<Route *> routes){ // TODO para que se usan?
 
 void Construction::feasibleSolution(Solution *solution) {
     /// Fase 1: agregar nodo favoreciendo producion dentro de los mas cercanos.
-//    cout << endl << "----FASE 1----" << endl;
-    while (solution->getUnsatisfiedType() != -1) {
+    cout << endl << "----FASE 1----" << endl;
+
+    while (solution->getUnsatisfiedType(0) != -1) {
         setNeighborhood(solution, false);
         Trip *selectedTrip = roulette(solution);
         if (this->currentRoute->trips.empty()){
@@ -132,12 +133,11 @@ void Construction::feasibleSolution(Solution *solution) {
             break; // iniciar fase 2
         }
     }
-//    solution->printAll();
 
     /// Fase 2: reparacion, agregar nodos a los camiones con espacio.
-//    cout << endl <<  " -----FASE 2-----" << endl;
+    cout << endl <<  " -----FASE 2-----" << endl;
     this->construct = true;
-    while (solution->getUnsatisfiedType() != -1) {
+    while (solution->getUnsatisfiedType(0) != -1) {
         setNeighborhood(solution, true);
         if(construct){
             Trip *selectedTrip = roulette(solution);

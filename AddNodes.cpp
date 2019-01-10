@@ -55,29 +55,67 @@ int AddNodes::getInsertPosition(Route *route, Trip *selectedTrip){
 }
 
 
+void AddNodes::changeRouteType(Route *route, Solution *solution){ //noide adding es de la mas baja a la mejor
+    vector<int> totalProducionByType(solution->recollected.size(), 0);
+    int totalProduction(0);
+    for(Node *node: solution->unvisitedNodes){
+        totalProducionByType[node->getTypeIndex()] += node->getProduction();
+    }
+    for(int i: totalProducionByType){
+        totalProduction += i;
+    }
+    double beta = solution->random_number(0.0, 100.0);
+    double choiceProbability(0.0);
+    for ( int i =0 ; i < totalProducionByType.size() ; ++i) {
+        if (beta > choiceProbability) {
+            choiceProbability += totalProducionByType[i] * 100.0 / totalProduction;
+        }
+        if ((beta <= choiceProbability) or (stoi(to_string(choiceProbability)) == 100)) {
+            route->type = i;
+        }
+    }
+}
+
+
 void AddNodes::nodeAdding(Route *route, Solution *solution) {
-    while (!route->isFull()) { // agrega nodos mientras existan vecinos.
+    int noadd(0);
+    while (!route->isFull()) { // agrega nodos mientras existan vecinos. //TODO cuando acepta solo nodos que mejoran, llega un momento en que no es full pero no acepta a nadie
+
+        if(route->getId()==1){
+            cout << "size" << route->trips.size() << endl;
+        }
+
+        if(route->trips.size()==1){ //TODO si se suplieron las demandas - o no? y no se agrego nada muchas veces...
+            changeRouteType(route, solution); //cambia el tipo de ruta
+        }
         Trip *selectedPlace = roulette(route, solution);
         Trip *selectedTrip = getBestOption(selectedPlace, route, solution);
         double delta = selectedTrip->benefit; //TODO considera la mejor opcion de leche -la del camion, no lo que realmente sera tras el blending
         if (delta > 0) {
             solution->insertTrip(route, getInsertPosition(route, selectedTrip), selectedTrip->finalNode);
             solution->updateSolution(selectedTrip->finalNode, true);
-            cout << "->added node " << selectedTrip->finalNode->getId() << " P: "
-                 << selectedTrip->finalNode->getProduction() << " D: "
-                 << selectedTrip->distance << " to route " << route->getId() << endl;//TODO es ese?
+            noadd = 0;
+//            cout << "->added node " << selectedTrip->finalNode->getId() << " P: "
+//                 << selectedTrip->finalNode->getProduction() << " D: "
+//                 << selectedTrip->distance << " to route " << route->getId() << endl;
         } else {
             double r = solution->random_number(0.0, 1.0);
-            double pEval = exp(delta / 100.0);
+            double pEval = exp(delta / solution->temperature);
             if (pEval > r) {
                 solution->insertTrip(route, getInsertPosition(route, selectedTrip), selectedTrip->finalNode);
                 solution->updateSolution(selectedTrip->finalNode, true);
-                cout << "->added node (NO BEN) " << selectedTrip->finalNode->getId() << " P: "
-                     << selectedTrip->finalNode->getProduction() << " D: "
-                     << selectedTrip->distance << " to route " << route->getId() << endl; //TODO es ese?
+                noadd = 0;
+//                cout << "->added node (NO BEN) " << selectedTrip->finalNode->getId() << " P: "
+//                     << selectedTrip->finalNode->getProduction() << " D: "
+//                     << selectedTrip->distance << " to route " << route->getId() << endl;
 //                route->printTrips();
+
             } else {
-                cout << "no se agrega nada" << endl;
+                noadd++;
+                if(noadd > route->trips.size()*3){
+                    solution->temperature = solution->problemInstance->temperature; // reset temperature.
+                }
+//                cout << "no se agrega nada" << endl;
             }
         }
         solution->resetRouteFull();
@@ -88,6 +126,9 @@ void AddNodes::nodeAdding(Route *route, Solution *solution) {
         } else {
             this->currentRoute = this->unfilledRoutes[0];
         }
+    }
+    if(route->getId()==1){
+        cout << "size" << route->trips.size() << endl;
     }
 }
 
@@ -106,7 +147,7 @@ void AddNodes::movement(Solution *solution) {
     while(!this->stopCriteria){
         nodeAdding(this->currentRoute, solution);
     }
-    if (solution->getUnsatisfiedType() != -1) {
+    if (solution->getUnsatisfiedType(0) != -1) {
         this->fix = false;
     }
 }

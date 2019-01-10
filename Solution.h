@@ -28,7 +28,7 @@ public:
     double kilometerCost;
     vector<bool> parameters;
 
-    int Temperature;
+    double temperature;
 
 public:
     explicit Solution(ProblemInstance *problemInstance, vector<bool> parameters);
@@ -60,7 +60,8 @@ public:
     Trip *fakeTrip(Node *node1, Node *node2, Node *node3, Route *route);
 
     vector<Route *> getUnfilledRoutes();
-    int getUnsatisfiedType();
+    int getUnsatisfiedType(int from);
+    int getCurrentType();
     Node *getCurrentNode();
     Truck *getNextTruck();
     double getTotalBenefit();
@@ -77,6 +78,6 @@ public:
 
     void printAll();
     void printSolution();
-    vector<int> convertMilk();
+    vector<int> convertMilk(bool print);
 
 };

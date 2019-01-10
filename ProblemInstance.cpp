@@ -1,10 +1,11 @@
 #include "ProblemInstance.h"
 
-ProblemInstance::ProblemInstance(int totalNodes){
+ProblemInstance::ProblemInstance(int totalNodes, double temperature){
     this->distances = new int *[totalNodes];
     for (int i = 0; i < totalNodes; ++i){
         this->distances[i] = new int[totalNodes];
     }
+    this->temperature = temperature;
 }
 
 ProblemInstance::~ProblemInstance(){

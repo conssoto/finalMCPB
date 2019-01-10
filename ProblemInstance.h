@@ -14,8 +14,10 @@ public:
     vector<Node *> nodes;
     vector<Truck *> trucks;
 
+    double temperature;
+
 public:
-    explicit ProblemInstance(int totalNodes);
+    explicit ProblemInstance(int totalNodes, double temperature);
     ~ProblemInstance();
 
     int getNumberOfNodes();
