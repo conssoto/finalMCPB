@@ -148,6 +148,19 @@ void Construction::feasibleSolution(Solution *solution) {
             break;
         }
     }
+
+    for(Route *r: solution->routes){
+        if (r->trips.empty()){
+            Trip * selectedTrip = solution->newTrip(solution->plant, solution->plant, r);
+            solution->addTrip(selectedTrip, r);
+            solution->stepUpdateSolution(selectedTrip, r, true);
+            cout << "empty "<< endl;
+        }
+        cout << r->trips.size() << endl;
+    }
+
+
+
     this->updateIds(solution->routes);
 //    solution->printAll();
 }

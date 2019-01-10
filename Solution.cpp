@@ -593,7 +593,7 @@ void Solution::printSolution() {
         int liters = this->problemInstance->trucks[r->truck->getId() - 1]->getTotalCapacity() - r->remainingCapacity;
         cout << liters
              << " litros de leche " << r->type << " llegan en Camion " << r->truck->getId() << endl;
-        litersxtype[r->truck->getId() - 1] += liters;
+        litersxtype[r->getTypeIndex()] += liters;
     }
 
     for (int i =0 ; i < this->recollected.size(); i++) {

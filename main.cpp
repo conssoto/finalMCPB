@@ -30,8 +30,8 @@ int main() {
 //    cin.getline(instanceOption, 3);
 //    Reader r(instanceOption);
 
-    Reader r("1");
-    vector<int> currentList = NODES_1;
+    Reader r("2");
+    vector<int> currentList = NODES_2;
     srand(1);
 
 
@@ -52,7 +52,7 @@ int main() {
     int nofix(0);
     int fix(0);
 
-    for (int j =0 ; j <150 ; ++j){
+    for (int j =0 ; j <2 ; ++j){
         cout << "---------------------------------------------------------reset " << j << endl;
 
         auto *currentSolution = new Solution(problemInstance, PARAMETERS);
@@ -62,68 +62,50 @@ int main() {
 
         lastSolution->resetSolution(*currentSolution);
         cout<<  "initial" << currentSolution->getTotalBenefit() << endl;
-        for(Route *route: currentSolution->routes){
-            if(route->trips.size() <=1){
-                cout << "size menor const" << endl;
-            }
+
+        cout << "***construccion**"<< endl;
+        for (Route *r: currentSolution->routes){
+            r->printAll();
         }
 
         if(construction->construct){
 
-            for (int i =0 ; i <700 ; ++i){
+            for (int i =0 ; i <10 ; ++i){
                 cout << "----------------iter " << i << " for reset " << j << endl;
-                for(Route *route: currentSolution->routes){
-                    if(route->trips.size() <=1){
-                        cout << "ini size menor " << endl;
-                    }
-                }
 
                 removeNodes->breakDemands(currentSolution);
-                for(Route *route: currentSolution->routes){
-                    if(route->trips.size() <=1){
-                        cout << "bD size menor " << endl;
-                    }
-                }
 
 //                addNodes->setTabuList(removeNodes->tabuList);
 //                addNodes->setTabuList({});
 
                 addNodes->movement(currentSolution);
-                for(Route *route: currentSolution->routes){
-                    if(route->trips.size() <=1){
-                        cout << "add size menor " << endl;
-                    }
-                }
 
                 if(addNodes->fix) {
-                    fix++;
-
-                    removeNodes->movement(currentSolution);
-                    for(Route *route: currentSolution->routes){
-                        if(route->trips.size() <=1){
-                            cout << "rem size menor " << endl;
-                        }
-                    }
+                    fix++;;
 
                     reorderNodes->movement(currentSolution);
-                    for(Route *route: currentSolution->routes){
-                        if(route->trips.size() <=1){
-                            cout << "reor size menor " << endl;
-                        }
-                    }
+
+                    removeNodes->movement(currentSolution);
 
                     if (currentSolution->getTotalBenefit() > bestSolution->getTotalBenefit()) {
                         bestSolution->resetSolution(*currentSolution);
-                        cout << "new best " << bestSolution->getTotalBenefit() << endl;
+
+                        cout << "***mejora**"<< endl;
+                        cout << endl;
+                        cout<< endl;
+                        for (Route *r: currentSolution->routes){
+                            r->printAll();
+                        }
+//                        cout << "new best " << bestSolution->getTotalBenefit() << endl;
                         better++;
                     } else {
-                        cout << "No ben " << currentSolution->getTotalBenefit() << endl;
+//                        cout << "No ben " << currentSolution->getTotalBenefit() << endl;
                         nobetter++;
                     }
                     lastSolution->resetSolution(*currentSolution);
                 } else{
                     nofix++;
-                    cout << "vuelve atras" << endl;
+//                    cout << "no fix" << endl;
                     currentSolution->resetSolution(*lastSolution);
                 }
                 currentSolution->temperature = currentSolution->temperature * 0.99;
@@ -132,6 +114,8 @@ int main() {
         delete currentSolution;
 
     }
+
+    cout << "******************finish ******************* "<< endl;
 
     cout << "ben " << bestSolution->getTotalBenefit() << " better " << better << endl;
     bestSolution->printAll();

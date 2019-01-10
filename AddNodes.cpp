@@ -80,11 +80,6 @@ void AddNodes::changeRouteType(Route *route, Solution *solution){ //noide adding
 void AddNodes::nodeAdding(Route *route, Solution *solution) {
     int noadd(0);
     while (!route->isFull()) { // agrega nodos mientras existan vecinos. //TODO cuando acepta solo nodos que mejoran, llega un momento en que no es full pero no acepta a nadie
-
-        if(route->getId()==1){
-            cout << "size" << route->trips.size() << endl;
-        }
-
         if(route->trips.size()==1){ //TODO si se suplieron las demandas - o no? y no se agrego nada muchas veces...
             changeRouteType(route, solution); //cambia el tipo de ruta
         }
@@ -95,9 +90,11 @@ void AddNodes::nodeAdding(Route *route, Solution *solution) {
             solution->insertTrip(route, getInsertPosition(route, selectedTrip), selectedTrip->finalNode);
             solution->updateSolution(selectedTrip->finalNode, true);
             noadd = 0;
-//            cout << "->added node " << selectedTrip->finalNode->getId() << " P: "
-//                 << selectedTrip->finalNode->getProduction() << " D: "
-//                 << selectedTrip->distance << " to route " << route->getId() << endl;
+            cout << "->added node " << selectedTrip->finalNode->getId() << " P: "
+                 << selectedTrip->finalNode->getProduction() << " D: "
+                 << selectedTrip->distance << " to route " << route->getId() << endl;
+//            route->printAll();
+
         } else {
             double r = solution->random_number(0.0, 1.0);
             double pEval = exp(delta / solution->temperature);
@@ -105,14 +102,14 @@ void AddNodes::nodeAdding(Route *route, Solution *solution) {
                 solution->insertTrip(route, getInsertPosition(route, selectedTrip), selectedTrip->finalNode);
                 solution->updateSolution(selectedTrip->finalNode, true);
                 noadd = 0;
-//                cout << "->added node (NO BEN) " << selectedTrip->finalNode->getId() << " P: "
-//                     << selectedTrip->finalNode->getProduction() << " D: "
-//                     << selectedTrip->distance << " to route " << route->getId() << endl;
-//                route->printTrips();
+                cout << "->added node (NO BEN) " << selectedTrip->finalNode->getId() << " P: "
+                     << selectedTrip->finalNode->getProduction() << " D: "
+                     << selectedTrip->distance << " to route " << route->getId() << endl;
+//                route->printAll();
 
             } else {
                 noadd++;
-                if(noadd > route->trips.size()*3){
+                if(noadd > route->trips.size()*5){ // resetea luego de no pillar nada que agrear
                     solution->temperature = solution->problemInstance->temperature; // reset temperature.
                 }
 //                cout << "no se agrega nada" << endl;
@@ -126,9 +123,6 @@ void AddNodes::nodeAdding(Route *route, Solution *solution) {
         } else {
             this->currentRoute = this->unfilledRoutes[0];
         }
-    }
-    if(route->getId()==1){
-        cout << "size" << route->trips.size() << endl;
     }
 }
 
