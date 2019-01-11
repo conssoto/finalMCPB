@@ -40,7 +40,7 @@ void RemoveNodes::setDeletable(Route *route, Solution *solution) {
         if (cuttingDemand < 0 and deletableTrip->finalNode->getProduction() < -cuttingDemand) {
             Trip *nextTrip = route->trips[i + 1];
             double deletableBenefit = getDeletableBenefit(deletableTrip, nextTrip, route, solution);
-            if(deletableBenefit > 0.0){
+            if(deletableBenefit > 0.0){ //vale la pena sacarlo
                 this->deletableTripsIndex.push_back(i); //beneficio de sacarlo
                 this->benefits.push_back(deletableBenefit); // >0 conviene sacarlo
             }
@@ -53,6 +53,7 @@ void RemoveNodes::breakDemands(Solution *solution) { // hasta romper alguna, no 
     this->tabuList.clear();
     bool stopCritera(false);
     int n(0);
+    int stop(0);
     while (!stopCritera) {
         int deleteRouteIndex = solution->random_int_number(0, (int) solution->routes.size() - 1); // size-1 es el index
         Route *route(solution->routes[deleteRouteIndex]);
@@ -97,6 +98,11 @@ void RemoveNodes::breakDemands(Solution *solution) { // hasta romper alguna, no 
                     stopCritera = true;
                 }
             }
+        } else{
+            stop++;
+        }
+        if(stop > (int) solution->routes.size()*5){
+            stopCritera = true;
         }
 
     }
@@ -107,23 +113,25 @@ void RemoveNodes::movement(Solution *solution) {
 //    cout << endl <<"RemoveNodes:" << endl;
 
     for (Route *route: solution->routes) {
-        bool stopCritera(false);
-        while (!stopCritera) { // mientras tenga nodos que sacar, saca
-            setDeletable(route, solution); //si no esta vacio
-            if (!this->benefits.empty()) {
-                int selectedIndex = roulette(solution);
-                int deleteIndex(this->deletableTripsIndex[selectedIndex]);
-                cout << "->deleted node " << route->trips[deleteIndex]->finalNode->getId() << " P: "
-                     << route->trips[deleteIndex]->finalNode->getProduction() << " D: "
-                     << route->trips[deleteIndex]->distance << " T: " << route->trips[deleteIndex]->finalNode->getType()
-                     << " from route " << route->getId()
-                     << endl;
+        if ((int) route->trips.size() > 2) { // no dejar la ruta vacia, todos loscami
+            bool stopCritera(false);
+            while (!stopCritera) { // mientras tenga nodos que sacar, saca
+                setDeletable(route, solution); //si no esta vacio
+                if (!this->benefits.empty()) {
+                    int selectedIndex = roulette(solution);
+                    int deleteIndex(this->deletableTripsIndex[selectedIndex]);
+                    cout << "->deleted node " << route->trips[deleteIndex]->finalNode->getId() << " P: "
+                         << route->trips[deleteIndex]->finalNode->getProduction() << " D: "
+                         << route->trips[deleteIndex]->distance << " T: " << route->trips[deleteIndex]->finalNode->getType()
+                         << " from route " << route->getId()
+                         << endl;
 //                route->printAll();
-                solution->updateSolution(route->trips[deleteIndex]->finalNode, false);
-                solution->removeTrip(deleteIndex, route);
-                solution->resetDemands();
-            } else {
-                stopCritera = true;
+                    solution->updateSolution(route->trips[deleteIndex]->finalNode, false);
+                    solution->removeTrip(deleteIndex, route);
+                    solution->resetDemands();
+                } else {
+                    stopCritera = true;
+                }
             }
         }
     }

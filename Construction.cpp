@@ -122,9 +122,6 @@ void Construction::feasibleSolution(Solution *solution) {
     while (solution->getUnsatisfiedType(0) != -1) {
         setNeighborhood(solution, false);
         Trip *selectedTrip = roulette(solution);
-        if (this->currentRoute->trips.empty()){
-
-        }
         solution->addTrip(selectedTrip, this->currentRoute);
         solution->stepUpdateSolution(selectedTrip, this->currentRoute, false);
 
@@ -158,9 +155,14 @@ void Construction::feasibleSolution(Solution *solution) {
         }
         cout << r->trips.size() << endl;
     }
-
-
-
-    this->updateIds(solution->routes);
+    //random. <- segun cuantos queden(?) <- ojo que 3 siempre quedan
+    for(Truck *truck: solution->unusedTrucks){
+        solution->addRoute(0); //no importa por que al ser largo 1,? se le asigna un tipo random.
+        Route *currentRoute=solution->routes.back();
+        Trip *toPlant = solution->newTrip(solution->plant, solution->plant, currentRoute);
+        solution->addTrip(toPlant, currentRoute);
+        solution->stepUpdateSolution(toPlant, currentRoute, true);
+    }
+    this->updateIds(solution->routes); //TODO sirve>
 //    solution->printAll();
 }
