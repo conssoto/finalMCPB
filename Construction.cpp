@@ -20,12 +20,12 @@ void Construction::deleteNeighborhood(){
     this->neighborhood.shrink_to_fit();
 }
 
-vector<Trip *> Construction::getOptions(Solution *solution, int currentType, Node *currentNode, bool resize) {
+vector<Trip *> Construction::getOptions(Solution *solution,  bool resize) {
     vector<Trip *> options;
-    for (int i = 0; i < solution->nodesXQuality[currentType - 1]; ++i) {
+    for (int i = 0; i < solution->nodesXQuality[this->currentType - 1]; ++i) {
         Node *option = solution->unvisitedNodes[i];
-        if (solution->routes.back()->fitsInTruck(option)) {
-            options.push_back(solution->newTrip(currentNode, option, solution->routes.back()));
+        if (this->currentRoute->fitsInTruck(option)) {
+            options.push_back(solution->newTrip(this->currentNode, option,this->currentRoute));
         }
     }
     if (resize){
@@ -55,7 +55,7 @@ void Construction::setNeighborhood(Solution *solution, bool repairing) {
                 this->currentRoute->trips.pop_back(); //saco la vuelta a la planta
                 this->currentNode = this->currentRoute->trips.back()->finalNode;
             }
-            options = getOptions(solution, this->currentType, this->currentNode, true);
+            options = getOptions(solution, true);
         }
     }
     else{
@@ -67,10 +67,10 @@ void Construction::setNeighborhood(Solution *solution, bool repairing) {
         if (this->currentNode == solution->plant && !this->currentRoute->trips.empty()) {
             solution->addRoute(this->currentType);
             this->currentRoute = solution->routes.back();
-            options = getOptions(solution, this->currentType, this->currentNode, solution->parameters[0]);
+            options = getOptions(solution, solution->parameters[0]);
         }
         else{
-            options = getOptions(solution, this->currentType, this->currentNode, true);
+            options = getOptions(solution, true);
         }
     }
     if (options.empty()) {
@@ -155,14 +155,14 @@ void Construction::feasibleSolution(Solution *solution) {
         }
         cout << r->trips.size() << endl;
     }
-    //random. <- segun cuantos queden(?) <- ojo que 3 siempre quedan
-    for(Truck *truck: solution->unusedTrucks){
-        solution->addRoute(1); //no importa por que al ser largo 1,? se le asigna un tipo random.
-        Route *currentRoute=solution->routes.back();
-        Trip *toPlant = solution->newTrip(solution->plant, solution->plant, currentRoute);
-        solution->addTrip(toPlant, currentRoute);
-        solution->stepUpdateSolution(toPlant, currentRoute, true);
-    }
+//    //random. <- segun cuantos queden(?) <- ojo que 3 siempre quedan
+//    for(Truck *truck: solution->unusedTrucks){
+//        solution->addRoute(1); //no importa por que al ser largo 1,? se le asigna un tipo random.
+//        Route *currentRoute=solution->routes.back();
+//        Trip *toPlant = solution->newTrip(solution->plant, solution->plant, currentRoute);
+//        solution->addTrip(toPlant, currentRoute);
+//        solution->stepUpdateSolution(toPlant, currentRoute, true);
+//    }
     this->updateIds(solution->routes); //TODO sirve>
 //    solution->printAll();
 }

@@ -30,8 +30,8 @@ int main() {
 //    cin.getline(instanceOption, 3);
 //    Reader r(instanceOption);
 
-    Reader r("3");
-    vector<int> currentList = NODES_3;
+    Reader r("6");
+    vector<int> currentList = NODES_6;
     srand(1);
 
 

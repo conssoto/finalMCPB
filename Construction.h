@@ -28,7 +28,7 @@ public:
     void setTotalProduction();
 
     void deleteNeighborhood();
-    vector<Trip *> getOptions(Solution *solution, int currentType, Node *currentNode, bool resize);
+    vector<Trip *> getOptions(Solution *solution, bool resize);
     Trip *roulette(Solution *solution);
 
     void feasibleSolution(Solution *solution);
