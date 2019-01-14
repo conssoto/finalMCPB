@@ -55,7 +55,7 @@ int AddNodes::getInsertPosition(Route *route, Trip *selectedTrip){
 }
 
 
-void AddNodes::changeRouteType(Route *route, Solution *solution){ //noide adding es de la mas baja a la mejor
+void AddNodes::changeRouteType(Route *route, Solution *solution){ //node adding es de la mas baja a la mejor
     vector<int> totalProducionByType(solution->recollected.size(), 0);
     int totalProduction(0);
     for(Node *node: solution->unvisitedNodes){
@@ -79,9 +79,10 @@ void AddNodes::changeRouteType(Route *route, Solution *solution){ //noide adding
 
 void AddNodes::nodeAdding(Route *route, Solution *solution) {
     int noadd(0);
-    while (!route->isFull()) { // agrega nodos mientras existan vecinos. //TODO cuando acepta solo nodos que mejoran, llega un momento en que no es full pero no acepta a nadie
-        if(route->trips.size()==1){ //TODO si se suplieron las demandas - o no? y no se agrego nada muchas veces...
+    while (!route->isFull()) { // agrega nodos mientras existan vecinos.
+        if(route->trips.size()==1){
             changeRouteType(route, solution); //cambia el tipo de ruta
+            route->full = false;
         }
         Trip *selectedPlace = roulette(route, solution);
         Trip *selectedTrip = getBestOption(selectedPlace, route, solution);
@@ -116,6 +117,7 @@ void AddNodes::nodeAdding(Route *route, Solution *solution) {
             }
         }
         solution->resetRouteFull();
+
         this->unfilledRoutes = solution->getUnfilledRoutes();
         reverse(this->unfilledRoutes.begin(), this->unfilledRoutes.end()); // recorrerla de atras para adelante.
         if (this->unfilledRoutes.empty()) {

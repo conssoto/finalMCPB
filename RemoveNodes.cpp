@@ -58,9 +58,8 @@ void RemoveNodes::breakDemands(Solution *solution) { // hasta romper alguna, no 
         int deleteRouteIndex = solution->random_int_number(0, (int) solution->routes.size() - 1); // size-1 es el index
         Route *route(solution->routes[deleteRouteIndex]);
         if ((int) route->trips.size() != 1) {
-            int deleteTripIndex(0);
-            deleteTripIndex = solution->random_int_number(0, (int) route->trips.size() -
-                                                             2);// cualquier trip menos el ultim
+            int deleteTripIndex = solution->random_int_number(0, (int) route->trips.size() -
+                                                             2);// cualquier trip menos el ultimo
             double delta = getDeletableBenefit(route->trips[deleteTripIndex], route->trips[deleteTripIndex + 1], route,
                                                solution);
             if (delta > 0) { // si sacarlo genera un beneficio, se elimina.
@@ -94,7 +93,7 @@ void RemoveNodes::breakDemands(Solution *solution) { // hasta romper alguna, no 
                 }
             }
             for (int d: solution->unsatisfiedDemand) { //si rompe alguna, para.
-                if (d > 0 and n >= 3) { // <- elimine tres al menos!
+                if ((d > 0 and n >= 3) or (n >= solution->routes.size()*2)) { // <- elimine tres al menos!
                     stopCritera = true;
                 }
             }

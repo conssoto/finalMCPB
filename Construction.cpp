@@ -157,7 +157,7 @@ void Construction::feasibleSolution(Solution *solution) {
     }
     //random. <- segun cuantos queden(?) <- ojo que 3 siempre quedan
     for(Truck *truck: solution->unusedTrucks){
-        solution->addRoute(0); //no importa por que al ser largo 1,? se le asigna un tipo random.
+        solution->addRoute(1); //no importa por que al ser largo 1,? se le asigna un tipo random.
         Route *currentRoute=solution->routes.back();
         Trip *toPlant = solution->newTrip(solution->plant, solution->plant, currentRoute);
         solution->addTrip(toPlant, currentRoute);

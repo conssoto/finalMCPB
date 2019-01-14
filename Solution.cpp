@@ -395,7 +395,8 @@ void Solution::resetDemands() {
 
 
 void Solution::resetRouteFull() {
-    for(Route *r: this->routes){
+
+    for(Route *r: this->routes){ //si ninguno cabe, ie es full,
         r->full = true;
         for (int i = 0; i < this->nodesXQuality[r->getTypeIndex()]; ++i) {
             Node *option = this->unvisitedNodes[i];

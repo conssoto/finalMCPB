@@ -29,11 +29,13 @@ void ReorderNodes::setBest(Route *route, ProblemInstance *problemInstance) {
 void ReorderNodes::movement(Solution *solution) {
 //    cout << endl <<  "ReorderNodes: " << endl;
     for (Route *route: solution->routes) {
-        if(this->randomIterations){
-            int i = solution->random_int_number(0, (int)route->trips.size()-1);
-            removeTrip(i, route, solution);
-            setBest(route, solution->problemInstance);
-            solution->insertTrip(route, this->bestIndex, this->node);
+        if(this->randomIterations != 0){
+            for (int i = 0; i < this->randomIterations ; ++i) {
+                int index = solution->random_int_number(0, (int)route->trips.size()-1);
+                removeTrip(index, route, solution);
+                setBest(route, solution->problemInstance);
+                solution->insertTrip(route, this->bestIndex, this->node);
+            }
         }
         else{
             for (int i = 0; i < route->trips.size() - 1; ++i) {

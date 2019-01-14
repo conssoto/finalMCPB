@@ -17,9 +17,9 @@ param Q:=
 
 #cantidad mínima a recolectar
 param P:=
-20000
-20000
-20000
+0
+0
+0
 ;
 
 #producción de cada predio

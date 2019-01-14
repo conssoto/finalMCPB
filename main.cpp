@@ -43,7 +43,7 @@ int main() {
     auto *bestSolution = new Solution(problemInstance, PARAMETERS);
     auto *lastSolution = new Solution(problemInstance, PARAMETERS);
 
-    auto *reorderNodes = new ReorderNodes(0);
+    auto *reorderNodes = new ReorderNodes(0); // 0->reordena todos, #n reordena n nodos por ruta
     auto *removeNodes = new RemoveNodes();
     auto *addNodes = new AddNodes();
 
@@ -52,10 +52,21 @@ int main() {
     int nofix(0);
     int fix(0);
 
-    for (int j =0 ; j <2 ; ++j){
+    int aux(0);
+    for(int i: problemInstance->qualities) {
+        if (i == 0) {
+            aux += 1;
+        }
+    }
+
+
+    for (int j =0 ; j <150 ; ++j){
         cout << "---------------------------------------------------------reset " << j << endl;
 
         auto *currentSolution = new Solution(problemInstance, PARAMETERS);
+
+
+
         auto *construction = new Construction(NEIGHBORHOOD, currentSolution);
 
         construction->feasibleSolution(currentSolution);
@@ -68,12 +79,18 @@ int main() {
             r->printAll();
         }
 
+
         if(construction->construct){
 
-            for (int i =0 ; i <10 ; ++i){
+            for (int i =0 ; i <700 ; ++i){
                 cout << "----------------iter " << i << " for reset " << j << endl;
+//                currentSolution->printAll();
 
+
+
+//                if (aux != currentSolution->unsatisfiedDemand.size()){ // si todos son 0, no rompas demandas -> todos los viajes tienen largo cero
                 removeNodes->breakDemands(currentSolution);
+//                }
 
 //                addNodes->setTabuList(removeNodes->tabuList);
 //                addNodes->setTabuList({});
@@ -81,7 +98,9 @@ int main() {
                 addNodes->movement(currentSolution);
 
                 if(addNodes->fix) {
-                    fix++;;
+                    fix++;
+                    cout << "***fix**"<< endl;
+                    cout << endl;
 
                     reorderNodes->movement(currentSolution);
 
@@ -99,6 +118,8 @@ int main() {
 //                        cout << "new best " << bestSolution->getTotalBenefit() << endl;
                         better++;
                     } else {
+                        cout << "***no ben**"<< endl;
+                        cout << endl;
 //                        cout << "No ben " << currentSolution->getTotalBenefit() << endl;
                         nobetter++;
                     }
