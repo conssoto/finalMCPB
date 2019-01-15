@@ -91,9 +91,9 @@ void AddNodes::nodeAdding(Route *route, Solution *solution) {
             solution->insertTrip(route, getInsertPosition(route, selectedTrip), selectedTrip->finalNode);
             solution->updateSolution(selectedTrip->finalNode, true);
             noadd = 0;
-            cout << "->added node " << selectedTrip->finalNode->getId() << " P: "
-                 << selectedTrip->finalNode->getProduction() << " D: "
-                 << selectedTrip->distance << " to route " << route->getId() << endl;
+//            cout << "->added node " << selectedTrip->finalNode->getId() << " P: "
+//                 << selectedTrip->finalNode->getProduction() << " D: "
+//                 << selectedTrip->distance << " to route " << route->getId() << endl;
 //            route->printAll();
 
         } else {
@@ -103,9 +103,9 @@ void AddNodes::nodeAdding(Route *route, Solution *solution) {
                 solution->insertTrip(route, getInsertPosition(route, selectedTrip), selectedTrip->finalNode);
                 solution->updateSolution(selectedTrip->finalNode, true);
                 noadd = 0;
-                cout << "->added node (NO BEN) " << selectedTrip->finalNode->getId() << " P: "
-                     << selectedTrip->finalNode->getProduction() << " D: "
-                     << selectedTrip->distance << " to route " << route->getId() << endl;
+//                cout << "->added node (NO BEN) " << selectedTrip->finalNode->getId() << " P: "
+//                     << selectedTrip->finalNode->getProduction() << " D: "
+//                     << selectedTrip->distance << " to route " << route->getId() << endl;
 //                route->printAll();
 
             } else {

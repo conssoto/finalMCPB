@@ -14,6 +14,8 @@ class Solution {
 public:
     vector<int> recollected; //x type
     vector<int> unsatisfiedDemand;
+    vector<int> newDemands;
+
     vector<Truck *> unusedTrucks;
     vector<Node *> unvisitedNodes;
 
@@ -38,6 +40,7 @@ public:
     double random_number(double min, double max);
     int random_int_number(int min, int max);
 
+    void changeDemands();
 
     void stepUpdateSolution(Trip *trip, Route *route, bool repairing);
     void updateSolution(Node *node, bool add);

@@ -28,6 +28,7 @@ vector<Trip *> Construction::getOptions(Solution *solution,  bool resize) {
             options.push_back(solution->newTrip(this->currentNode, option,this->currentRoute));
         }
     }
+
     if (resize){
         if (options.size() > this->alpha) {
             sort(options.begin(), options.end(), sortByDistance);
@@ -58,7 +59,7 @@ void Construction::setNeighborhood(Solution *solution, bool repairing) {
             options = getOptions(solution, true);
         }
     }
-    else{
+    else{ //esta construyendo
         this->currentNode = solution->getCurrentNode();
         this->currentRoute = solution->routes.back();
         this->currentType = solution->getCurrentType();
@@ -117,7 +118,7 @@ void Construction::updateIds(vector<Route *> routes){ // TODO para que se usan?
 
 void Construction::feasibleSolution(Solution *solution) {
     /// Fase 1: agregar nodo favoreciendo producion dentro de los mas cercanos.
-    cout << endl << "----FASE 1----" << endl;
+//    cout << endl << "----FASE 1----" << endl;
 
     while (solution->getUnsatisfiedType(0) != -1) {
         setNeighborhood(solution, false);
@@ -132,7 +133,7 @@ void Construction::feasibleSolution(Solution *solution) {
     }
 
     /// Fase 2: reparacion, agregar nodos a los camiones con espacio.
-    cout << endl <<  " -----FASE 2-----" << endl;
+//    cout << endl <<  " -----FASE 2-----" << endl;
     this->construct = true;
     while (solution->getUnsatisfiedType(0) != -1) {
         setNeighborhood(solution, true);
@@ -151,9 +152,7 @@ void Construction::feasibleSolution(Solution *solution) {
             Trip * selectedTrip = solution->newTrip(solution->plant, solution->plant, r);
             solution->addTrip(selectedTrip, r);
             solution->stepUpdateSolution(selectedTrip, r, true);
-            cout << "empty "<< endl;
         }
-        cout << r->trips.size() << endl;
     }
 //    //random. <- segun cuantos queden(?) <- ojo que 3 siempre quedan
 //    for(Truck *truck: solution->unusedTrucks){

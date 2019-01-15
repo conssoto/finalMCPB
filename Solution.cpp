@@ -6,6 +6,7 @@ Solution::Solution(ProblemInstance *problemInstance, vector<bool> parameters){
     }
 
     this->unsatisfiedDemand = problemInstance->qualities;
+    this->newDemands = problemInstance->qualities;
 
     for (Truck *truck: problemInstance->trucks){
         Truck *copy = truck;
@@ -39,6 +40,9 @@ Solution::~Solution() {
     this->unsatisfiedDemand.clear();
     this->unsatisfiedDemand.shrink_to_fit();
 
+    this->newDemands.clear();
+    this->newDemands.shrink_to_fit();
+
     this->unusedTrucks.clear();
     this->unusedTrucks.shrink_to_fit();
 
@@ -70,6 +74,7 @@ Solution::Solution(const Solution &s2){
 
     recollected = s2.recollected;
     unsatisfiedDemand = s2.unsatisfiedDemand;
+    newDemands = s2.newDemands;
 
     for (Truck *truck: s2.unusedTrucks){
         Truck *copy = truck;
@@ -97,40 +102,11 @@ Solution::Solution(const Solution &s2){
     temperature = s2.temperature;
 }
 
-
-//void Solution::changeDemands(){ //node adding es de la mas baja a la mejor
-//    vector<int> totalProducionByType(this->recollected.size(), 0);
-//    vector<int> newDemands(this->recollected.size(), 0);
-//    int totalProduction(0);
-//    for(Node *node: problemInstance->nodes){
-//        totalProducionByType[node->getTypeIndex()] += node->getProduction();
-//    }
-//    for(int i: totalProducionByType){
-//        totalProduction += i;
-//    }
-//    for(Truck *t: problemInstance->trucks){
-//        double beta = this->random_number(0.0, 100.0);
-//        double choiceProbability(0.0);
-//        for ( int i =0 ; i < totalProducionByType.size() ; ++i) {
-//            if (beta > choiceProbability) {
-//                choiceProbability += totalProducionByType[i] * 100.0 / totalProduction;
-//            }
-//            if ((beta <= choiceProbability) or (stoi(to_string(choiceProbability)) == 100)) {
-//                newDemands[i] += (int)(0.7*t->getTotalCapacity());
-//                totalProducionByType[i] -=t->getTotalCapacity();
-//                totalProduction -= t->getTotalCapacity();
-//            }
-//        }
-//    }
-//    this->unsatisfiedDemand = newDemands;
-//    this->newDemands = newDemands;
-//}
-
-
 void Solution::resetSolution(const Solution &s2) {
 
     this->recollected = s2.recollected;
     this->unsatisfiedDemand = s2.unsatisfiedDemand;
+    this->newDemands = s2.newDemands;
 
     this->unusedTrucks.clear();
     this->unusedTrucks.shrink_to_fit();
@@ -159,6 +135,41 @@ void Solution::resetSolution(const Solution &s2) {
         this->routes.push_back(copy);
     }
     this->temperature = s2.temperature;
+}
+
+void Solution::changeDemands(){
+    vector<int> totalProductionByType(this->recollected.size(), 0);
+    vector<int> totalLiterBenefitByType(this->recollected.size(), 0);
+    vector<int> newDemands(this->recollected.size(), 0);
+    int totalLiterBenefit(0);
+    for(Node *node: problemInstance->nodes){
+        totalProductionByType[node->getTypeIndex()] += node->getProduction();
+        totalLiterBenefitByType[node->getTypeIndex()] += (int)(node->getProduction()*this->literCost[node->getTypeIndex()]);
+        totalLiterBenefit += (int)(node->getProduction()*this->literCost[node->getTypeIndex()]);
+    }
+    for(Truck *t: problemInstance->trucks){ //problema, quedan camiones
+        double beta = this->random_number(0.0, 100.0);
+        double choiceProbability(0.0);
+        for ( int i =0 ; i < totalLiterBenefitByType.size() ; ++i) {
+            if (beta > choiceProbability) {
+                choiceProbability += totalLiterBenefitByType[i] * 100.0 / totalLiterBenefit;
+            }
+            if ((beta <= choiceProbability) or (stoi(to_string(choiceProbability)) == 100)) {
+                newDemands[i] += (int)(0.7*t->getTotalCapacity()); //TODO funciona(?)
+                totalProductionByType[i] -=t->getTotalCapacity();
+                totalLiterBenefitByType[i] -=(int)(t->getTotalCapacity()*this->literCost[i]);
+                totalLiterBenefit -= (int)(t->getTotalCapacity()*this->literCost[i]);
+                if(totalProductionByType[i] < t->getTotalCapacity()){
+                    totalLiterBenefit -= (totalLiterBenefitByType[i]);
+                    totalProductionByType.erase(totalProductionByType.begin() + i);
+                    totalLiterBenefitByType.erase(totalLiterBenefitByType.begin() + i);
+                }
+                break;
+            }
+        }
+    }
+    this->unsatisfiedDemand = newDemands;
+    this->newDemands = newDemands;
 }
 
 double Solution::random_number(double min, double max){
@@ -288,10 +299,11 @@ Trip *Solution::fakeTrip(Node *node1, Node *node2, Node *node3, Route *route) {
     return trip;
 }
 
-int Solution::getCurrentType() { //TODO esta bien?
-
-    if(this->unsatisfiedDemand.back() > 0){
-        return this->routes.back()->getType();
+int Solution::getCurrentType() { //si el ultimo es cero? devuelve -1
+    for(int i: this->unsatisfiedDemand) {
+        if (i > 0) {
+            return this->routes.back()->getType();
+        }
     }
     return -1; //si el ultimo tipo ya se suplio, devuelve -1
 }
@@ -401,7 +413,7 @@ void Solution::updateDemands(int currentTypeIndex, Node *currentNode, Route *cur
 }
 
 void Solution::resetDemands() {
-    this->unsatisfiedDemand = problemInstance->qualities;
+    this->unsatisfiedDemand = this->newDemands;
     fill(this->recollected.begin(), this->recollected.end(), 0);
     for (Route *route: this->routes) {
         int type(0);
@@ -478,7 +490,7 @@ void Solution::printAll() {
     }
 
     double totalDemand(0);
-    for (int q: this->problemInstance->qualities) {
+    for (int q: this->newDemands) {
         totalDemand += q;
     }
     cout << "milk excess: " << totalRecollected - totalDemand << endl;
@@ -533,62 +545,83 @@ char Solution::getType(int i){
 }
 
 vector<int> Solution::convertMilk(bool print) {
-    vector<int> inPlant;
-    vector<int> recollectedMilk = this->recollected;
-    vector<int> dda = this->problemInstance->qualities;
-    vector<int> totalMilk;
-
-    for(int i = 0; i < problemInstance->getNumberOfQualities(); ++i){
-        totalMilk.push_back(0);
-    }
-
-    reverse(recollectedMilk.begin(), recollectedMilk.end());
-    reverse(dda.begin(), dda.end());
-    for(int i =0; i < dda.size(); ++i){
-        for(int j =0; j < recollectedMilk.size(); ++j){
-            if (dda[i] > 0){
-                if(recollectedMilk[j]>0){
-                    int diff = recollectedMilk[j] - dda[i];
-                    if (diff>=0){
-                        if (i == j){
-                            if(print){
-                                cout << recollectedMilk[j] << " de leche " << getType(i) << " se usa como leche " << getType(j) << " en la planta" << endl;
-                            }
-                            totalMilk[j] += recollectedMilk[j];
-                            recollectedMilk[j] = 0;
-                            break;
-                        }
-                        else {
-                            recollectedMilk[j] -= dda[i];
-                            if(print){
-                                cout << dda[i] << " de leche " << getType(j) << " se usa como leche " << getType(i) << " en la planta" << endl;
-                            }
-                            totalMilk[i] += dda[i];
-                            break;
-                        }
-                    }
-                    else{
-                        if(print){
-                            cout << recollectedMilk[j] << " de leche " << getType(i) << " se usa como leche " << getType(j) << " en la planta" << endl;
-                        }
-                        totalMilk[j] += recollectedMilk[j];
-                        recollectedMilk[j] -= dda[i];
-                        dda[i] = -recollectedMilk[j];
-                        recollectedMilk[j] = 0;
-                    }
-                }
-            }
-            else{
-                break;
-            }
+    int aux(0);
+    for (int i: problemInstance->qualities) {
+        if (i == 0) {
+            aux += 1;
         }
     }
-    return totalMilk;
+    vector<int> recollectedMilk = this->recollected;
+    reverse(recollectedMilk.begin(), recollectedMilk.end());
+
+    if (aux == problemInstance->getNumberOfQualities()) { //dar vuelta
+        if (print) {
+            for (int i = 0; i < recollectedMilk.size(); ++i) {
+                cout << recollectedMilk[i] << " de leche " << getType(i) << " se usa como leche "
+                     << getType(i) << " en la planta" << endl;
+            }
+        }
+        return recollectedMilk;
+    } else {
+        vector<int> inPlant;
+        vector<int> dda = this->newDemands;
+        vector<int> totalMilk;
+
+        for (int i = 0; i < problemInstance->getNumberOfQualities(); ++i) {
+            totalMilk.push_back(0);
+        }
+        reverse(dda.begin(), dda.end());
+        for (int i = 0; i < dda.size(); ++i) {
+            for (int j = 0; j < recollectedMilk.size(); ++j) {
+                if (dda[i] > 0) {
+                    if (recollectedMilk[j] > 0) {
+                        int diff = recollectedMilk[j] - dda[i];
+                        if (diff >= 0) {
+                            if (i == j) {
+                                if (print) {
+                                    cout << recollectedMilk[j] << " de leche " << getType(i) << " se usa como leche "
+                                         << getType(j) << " en la planta" << endl;
+                                }
+                                totalMilk[j] += recollectedMilk[j];
+                                recollectedMilk[j] = 0;
+                                break;
+                            } else {
+                                recollectedMilk[j] -= dda[i];
+                                if (print) {
+                                    cout << dda[i] << " de leche " << getType(j) << " se usa como leche " << getType(i)
+                                         << " en la planta" << endl;
+                                }
+                                totalMilk[i] += dda[i];
+                                break;
+                            }
+                        } else {
+                            if (print) {
+                                cout << recollectedMilk[j] << " de leche " << getType(i) << " se usa como leche "
+                                     << getType(j) << " en la planta" << endl;
+                            }
+                            totalMilk[j] += recollectedMilk[j];
+                            recollectedMilk[j] -= dda[i];
+                            dda[i] = -recollectedMilk[j];
+                            recollectedMilk[j] = 0;
+                        }
+                    }
+                } else {
+                    break;
+                }
+            }
+        }
+        return totalMilk;
+    }
 }
 
 void Solution::printSolution() {
     cout << "Cantidad mínima a recoger (litros): " << endl;
     for (int d: this->problemInstance->qualities) {
+        cout << d << endl;
+    }
+
+    cout << "Cantidad ficticia a recoger (litros): " << endl;
+    for (int d: this->newDemands) {
         cout << d << endl;
     }
 

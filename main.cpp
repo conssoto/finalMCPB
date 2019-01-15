@@ -1,5 +1,6 @@
 #include <iostream>
 #include <random>
+#include <ctime>
 #include "ProblemInstance.h"
 #include "Solution.h"
 #include "Reader.h"
@@ -26,10 +27,11 @@ vector<int> FS_6 = {0, 22, 4, 1, 13, 0, 0, 40, 0, 0, 28, 26, 25, 20, 23, 0, 0, 1
 
 
 int main() {
+    unsigned t0, t1;
 //    cout << "Enter instance number: ";
 //    cin.getline(instanceOption, 3);
 //    Reader r(instanceOption);
-
+    t0=clock();
     Reader r("6");
     vector<int> currentList = NODES_6;
     srand(1);
@@ -60,47 +62,44 @@ int main() {
     }
 
 
-    for (int j =0 ; j <150 ; ++j){
+    for (int j =0 ; j <2500 ; ++j){
         cout << "---------------------------------------------------------reset " << j << endl;
 
         auto *currentSolution = new Solution(problemInstance, PARAMETERS);
 
-
+        if(aux == problemInstance->getNumberOfQualities()){
+            currentSolution->changeDemands();
+        }
 
         auto *construction = new Construction(NEIGHBORHOOD, currentSolution);
 
         construction->feasibleSolution(currentSolution);
 
         lastSolution->resetSolution(*currentSolution);
-        cout<<  "initial" << currentSolution->getTotalBenefit() << endl;
+//        cout<<  "initial" << currentSolution->getTotalBenefit() << endl;
+//
+//        cout << "***construccion**"<< endl;
+//        for (Route *r: currentSolution->routes){
+//            r->printAll();
+//        }
 
-        cout << "***construccion**"<< endl;
-        for (Route *r: currentSolution->routes){
-            r->printAll();
-        }
 
 
         if(construction->construct){
+            for (int i =0 ; i <2000 ; ++i){
+//                cout << "----------------iter " << i << " for reset " << j << endl;
 
-            for (int i =0 ; i <700 ; ++i){
-                cout << "----------------iter " << i << " for reset " << j << endl;
 //                currentSolution->printAll();
 
-
-
-//                if (aux != currentSolution->unsatisfiedDemand.size()){ // si todos son 0, no rompas demandas -> todos los viajes tienen largo cero
                 removeNodes->breakDemands(currentSolution);
-//                }
 
 //                addNodes->setTabuList(removeNodes->tabuList);
 //                addNodes->setTabuList({});
-
                 addNodes->movement(currentSolution);
 
                 if(addNodes->fix) {
                     fix++;
-                    cout << "***fix**"<< endl;
-                    cout << endl;
+//                    cout << "***fix**"<< endl;
 
                     reorderNodes->movement(currentSolution);
 
@@ -109,17 +108,14 @@ int main() {
                     if (currentSolution->getTotalBenefit() > bestSolution->getTotalBenefit()) {
                         bestSolution->resetSolution(*currentSolution);
 
-                        cout << "***mejora**"<< endl;
-                        cout << endl;
-                        cout<< endl;
-                        for (Route *r: currentSolution->routes){
-                            r->printAll();
-                        }
+//                        cout << "***mejora**"<< endl;
+//                        for (Route *r: currentSolution->routes){
+//                            r->printAll();
+//                        }
 //                        cout << "new best " << bestSolution->getTotalBenefit() << endl;
                         better++;
                     } else {
-                        cout << "***no ben**"<< endl;
-                        cout << endl;
+//                        cout << "***no ben**"<< endl;
 //                        cout << "No ben " << currentSolution->getTotalBenefit() << endl;
                         nobetter++;
                     }
@@ -131,6 +127,9 @@ int main() {
                 }
                 currentSolution->temperature = currentSolution->temperature * 0.99;
             }
+        }
+        else{
+//            cout << "***no construct**"<< endl;
         }
         delete currentSolution;
 
@@ -186,6 +185,9 @@ int main() {
     delete lastSolution;
     delete bestSolution;
     delete problemInstance;
+    t1 = clock();
+    double time = (double(t1-t0)/CLOCKS_PER_SEC);
+    cout << "Execution Time: " << time << endl;
 
     return 0;
 }

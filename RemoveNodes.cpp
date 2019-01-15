@@ -64,10 +64,10 @@ void RemoveNodes::breakDemands(Solution *solution) { // hasta romper alguna, no 
                                                solution);
             if (delta > 0) { // si sacarlo genera un beneficio, se elimina.
                 n++;
-                cout << "->break node " << route->trips[deleteTripIndex]->finalNode->getId() << " P: "
-                     << route->trips[deleteTripIndex]->finalNode->getProduction() << " D: "
-                     << route->trips[deleteTripIndex]->distance << " T: "
-                     << route->trips[deleteTripIndex]->finalNode->getType() << " from route " << route->getId() << endl;
+//                cout << "->break node " << route->trips[deleteTripIndex]->finalNode->getId() << " P: "
+//                     << route->trips[deleteTripIndex]->finalNode->getProduction() << " D: "
+//                     << route->trips[deleteTripIndex]->distance << " T: "
+//                     << route->trips[deleteTripIndex]->finalNode->getType() << " from route " << route->getId() << endl;
 //                route->printAll();
 //                this->tabuList.push_back(route->trips[deleteTripIndex]->finalNode);
                 solution->updateSolution(route->trips[deleteTripIndex]->finalNode, false);
@@ -78,11 +78,11 @@ void RemoveNodes::breakDemands(Solution *solution) { // hasta romper alguna, no 
                 double pEval = exp(delta / solution->temperature);
                 if (pEval > r) {
                     n++;
-                    cout << "->break node (NO BEN) " << route->trips[deleteTripIndex]->finalNode->getId() << " P: "
-                         << route->trips[deleteTripIndex]->finalNode->getProduction() << " D: "
-                         << route->trips[deleteTripIndex]->distance << " T: "
-                         << route->trips[deleteTripIndex]->finalNode->getType() << " from route " << route->getId()
-                         << endl;
+//                    cout << "->break node (NO BEN) " << route->trips[deleteTripIndex]->finalNode->getId() << " P: "
+//                         << route->trips[deleteTripIndex]->finalNode->getProduction() << " D: "
+//                         << route->trips[deleteTripIndex]->distance << " T: "
+//                         << route->trips[deleteTripIndex]->finalNode->getType() << " from route " << route->getId()
+//                         << endl;
 //                    route->printAll();
 //                    this->tabuList.push_back(route->trips[deleteTripIndex]->finalNode);
                     solution->updateSolution(route->trips[deleteTripIndex]->finalNode, false);
@@ -119,11 +119,11 @@ void RemoveNodes::movement(Solution *solution) {
                 if (!this->benefits.empty()) {
                     int selectedIndex = roulette(solution);
                     int deleteIndex(this->deletableTripsIndex[selectedIndex]);
-                    cout << "->deleted node " << route->trips[deleteIndex]->finalNode->getId() << " P: "
-                         << route->trips[deleteIndex]->finalNode->getProduction() << " D: "
-                         << route->trips[deleteIndex]->distance << " T: " << route->trips[deleteIndex]->finalNode->getType()
-                         << " from route " << route->getId()
-                         << endl;
+//                    cout << "->deleted node " << route->trips[deleteIndex]->finalNode->getId() << " P: "
+//                         << route->trips[deleteIndex]->finalNode->getProduction() << " D: "
+//                         << route->trips[deleteIndex]->distance << " T: " << route->trips[deleteIndex]->finalNode->getType()
+//                         << " from route " << route->getId()
+//                         << endl;
 //                route->printAll();
                     solution->updateSolution(route->trips[deleteIndex]->finalNode, false);
                     solution->removeTrip(deleteIndex, route);
