@@ -21,8 +21,8 @@ vector<int> FS_1 = {0, 40, 0, 0, 31, 10, 4, 7, 0, 0, 34, 19, 16, 13, 1, 0, 0, 22
 vector<int> FS_2 = {0, 34, 37, 40, 10, 0, 0, 19, 16, 13, 1, 4, 7, 0, 0, 31, 2, 5, 8, 11, 35, 32, 0, 0, 26, 23, 20, 17, 29, 0, 0, 25, 22, 28, 0};
 vector<int> FS_3 = {29, 35, 32, 20, 23, 26, 31, 2, 5, 11, 8, 7, 17, 10, 4, 1, 13, 16, 19, 28, 25, 22, 40, 37};
 vector<int> FS_4 = {19, 16, 13, 1, 4, 10, 27, 29, 35, 32, 20, 23, 26, 28, 25, 22, 40, 37,  17, 7, 8, 11, 5, 2, 31};
-vector<int> FS_5 = {37, 40, 22, 25, 28, 27, 10, 7, 8, 5, 4, 11, 32, 35, 26, 23, 20, 29, 17, 16, 13, 14, 1, 2, 31};
-vector<int> FS_6 = {22, 4, 1, 13, 40, 28, 26, 25, 20, 23, 11, 32, 35, 29, 31, 2, 5, 8, 7, 10};
+vector<int> FS_5 = {0, 37, 40, 22, 25, 28, 0, 0, 27, 0, 0, 10, 7, 8, 5, 4, 11, 0, 0, 32, 35, 26, 23, 20, 29, 0, 0, 17, 16, 13, 14, 1, 2, 31, 0};
+vector<int> FS_6 = {0, 22, 4, 1, 13, 0, 0, 40, 0, 0, 28, 26, 25, 20, 23, 0, 0, 11, 32, 35, 29, 0, 0, 31, 2, 5, 8, 7, 10, 0};
 
 
 int main() {
@@ -136,6 +136,12 @@ int main() {
 
     }
 
+    for(Route *route:bestSolution->routes){
+        route->resetRouteType();
+    }
+
+
+
     cout << "******************finish ******************* "<< endl;
 
     cout << "ben " << bestSolution->getTotalBenefit() << " better " << better << endl;
@@ -167,6 +173,8 @@ int main() {
         cout << "sobran " << checklist.size() - currentList.size() << " nodos" << endl;
     }
 
+
+//    vector<int> currentList = FS_5;
 //    for(int i = 0; i < currentList.size()-1; ++i){
 //        if(currentList[i]!=0 or currentList[i+1]!=0){
 //            cout << problemInstance->distances[currentList[i]][currentList[i+1]] << endl;

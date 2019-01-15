@@ -38,6 +38,17 @@ bool Route::isFull(){ return this->full; }
 
 void Route::setFull() { this->full = true; }
 
+void Route::resetRouteType() {
+    int newType(0);
+    for (Trip *t: this->trips) {
+        if (t->finalNode->getType() > newType) {
+            newType = t->finalNode->getType();
+        }
+    }
+    this->type = newType;
+}
+
+
 bool Route::fitsInTruck(Node *node){
     return this->remainingCapacity >= node->getProduction();
 }

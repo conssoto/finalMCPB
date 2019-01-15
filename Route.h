@@ -27,6 +27,7 @@ public:
     int getType();
     bool isFull();
 
+    void resetRouteType();
     void setFull();
     bool fitsInTruck(Node *node);
 

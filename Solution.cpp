@@ -97,6 +97,36 @@ Solution::Solution(const Solution &s2){
     temperature = s2.temperature;
 }
 
+
+//void Solution::changeDemands(){ //node adding es de la mas baja a la mejor
+//    vector<int> totalProducionByType(this->recollected.size(), 0);
+//    vector<int> newDemands(this->recollected.size(), 0);
+//    int totalProduction(0);
+//    for(Node *node: problemInstance->nodes){
+//        totalProducionByType[node->getTypeIndex()] += node->getProduction();
+//    }
+//    for(int i: totalProducionByType){
+//        totalProduction += i;
+//    }
+//    for(Truck *t: problemInstance->trucks){
+//        double beta = this->random_number(0.0, 100.0);
+//        double choiceProbability(0.0);
+//        for ( int i =0 ; i < totalProducionByType.size() ; ++i) {
+//            if (beta > choiceProbability) {
+//                choiceProbability += totalProducionByType[i] * 100.0 / totalProduction;
+//            }
+//            if ((beta <= choiceProbability) or (stoi(to_string(choiceProbability)) == 100)) {
+//                newDemands[i] += (int)(0.7*t->getTotalCapacity());
+//                totalProducionByType[i] -=t->getTotalCapacity();
+//                totalProduction -= t->getTotalCapacity();
+//            }
+//        }
+//    }
+//    this->unsatisfiedDemand = newDemands;
+//    this->newDemands = newDemands;
+//}
+
+
 void Solution::resetSolution(const Solution &s2) {
 
     this->recollected = s2.recollected;
@@ -392,10 +422,7 @@ void Solution::resetDemands() {
     }
 }
 
-
-
 void Solution::resetRouteFull() {
-
     for(Route *r: this->routes){ //si ninguno cabe, ie es full,
         r->full = true;
         for (int i = 0; i < this->nodesXQuality[r->getTypeIndex()]; ++i) {
