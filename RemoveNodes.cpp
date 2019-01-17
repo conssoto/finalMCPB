@@ -93,7 +93,7 @@ void RemoveNodes::breakDemands(Solution *solution) { // hasta romper alguna, no 
                 }
             }
             for (int d: solution->unsatisfiedDemand) { //si rompe alguna, para.
-                if ((d > 0 and n >= 3) or (n >= solution->routes.size()*2)) { // <- elimine tres al menos!
+                if (d > 0 and n >= 3) { // <- elimine tres al menos! or (n >= solution->routes.size()*2)
                     stopCritera = true;
                 }
             }
@@ -103,7 +103,6 @@ void RemoveNodes::breakDemands(Solution *solution) { // hasta romper alguna, no 
         if(stop > (int) solution->routes.size()*5){
             stopCritera = true;
         }
-
     }
     solution->resetRouteFull();
 }

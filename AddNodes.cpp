@@ -31,12 +31,10 @@ Trip *AddNodes::getBestOption(Trip *trip, Route *route, Solution *solution){
     Node *nextNode = trip->finalNode;
     for (int i = 0; i < solution->nodesXQuality[route->getTypeIndex()]; ++i) {
         Node *option = solution->unvisitedNodes[i];
-//        if (find(this->tabuList.begin(), this->tabuList.end(), option) == this->tabuList.end()) {
         if (route->fitsInTruck(option)) {
             auto fakeTrip = solution->fakeTrip(currentNode, option, nextNode, route);
             options.push_back(fakeTrip);
         }
-//        }
     }
     if (!options.empty()) {
         sort(options.begin(), options.end(), sortByBenefit);
@@ -56,19 +54,17 @@ int AddNodes::getInsertPosition(Route *route, Trip *selectedTrip){
 
 
 void AddNodes::changeRouteType(Route *route, Solution *solution){ //node adding es de la mas baja a la mejor
-    vector<int> totalProducionByType(solution->recollected.size(), 0);
-    int totalProduction(0);
+    vector<int> totalLiterBenefitByType(solution->recollected.size(), 0);
+    int totalLiterBenefit(0);
     for(Node *node: solution->unvisitedNodes){
-        totalProducionByType[node->getTypeIndex()] += node->getProduction();
-    }
-    for(int i: totalProducionByType){
-        totalProduction += i;
+        totalLiterBenefitByType[node->getTypeIndex()] += (int)(node->getProduction()*solution->literCost[node->getTypeIndex()]);
+        totalLiterBenefit+= (int)(node->getProduction()*solution->literCost[node->getTypeIndex()]);
     }
     double beta = solution->random_number(0.0, 100.0);
     double choiceProbability(0.0);
-    for ( int i =0 ; i < totalProducionByType.size() ; ++i) {
+    for ( int i =0 ; i < totalLiterBenefitByType.size() ; ++i) {
         if (beta > choiceProbability) {
-            choiceProbability += totalProducionByType[i] * 100.0 / totalProduction;
+            choiceProbability += totalLiterBenefitByType[i] * 100.0 / totalLiterBenefit;
         }
         if ((beta <= choiceProbability) or (stoi(to_string(choiceProbability)) == 100)) {
             route->type = i;
