@@ -1,6 +1,6 @@
 #include "Solution.h"
 
-Solution::Solution(ProblemInstance *problemInstance, vector<bool> parameters){
+Solution::Solution(ProblemInstance *problemInstance, unsigned int seed){
     for(int i = 0; i < problemInstance->getNumberOfQualities(); ++i){
         this->recollected.push_back(0);
     }
@@ -27,7 +27,7 @@ Solution::Solution(ProblemInstance *problemInstance, vector<bool> parameters){
     this->plant = new Node(0, 0, 0);
     this->literCost = {0.03, 0.021, 0.009};
     this->kilometerCost = 1;
-    this->parameters = parameters;
+    this->seed = seed;
 
     this->temperature = problemInstance->temperature;
 }
@@ -65,9 +65,6 @@ Solution::~Solution() {
 
     this->literCost.clear();
     this->literCost.shrink_to_fit();
-
-    this->parameters.clear();
-    this->parameters.shrink_to_fit();
 }
 
 Solution::Solution(const Solution &s2){
@@ -100,6 +97,7 @@ Solution::Solution(const Solution &s2){
     kilometerCost = s2.kilometerCost;
 
     temperature = s2.temperature;
+    seed = s2.seed;
 }
 
 void Solution::resetSolution(const Solution &s2) {
@@ -135,6 +133,7 @@ void Solution::resetSolution(const Solution &s2) {
         this->routes.push_back(copy);
     }
     this->temperature = s2.temperature;
+    this->seed = s2.seed;
 }
 
 void Solution::changeDemands(){
@@ -173,14 +172,14 @@ void Solution::changeDemands(){
 }
 
 double Solution::random_number(double min, double max){
-    thread_local static mt19937 mt(1008);
+    thread_local static mt19937 mt(this->seed);
     thread_local static uniform_real_distribution<double> dist;
     using pick = uniform_real_distribution<double>::param_type;
     return dist(mt, pick(min, max));
 }
 
 int Solution::random_int_number(int min, int max){
-    thread_local static mt19937 mt(1008);
+    thread_local static mt19937 mt(this->seed);
     thread_local static uniform_int_distribution<int> dist;
     using pick = uniform_int_distribution<int>::param_type;
     return dist(mt, pick(min, max));
@@ -676,3 +675,81 @@ void Solution::printSolution() {
     cout << "F.O. = " << to_string(getTotalBenefit()) << endl;
 }
 
+void Solution::writeSolution(int instance, unsigned int seed) {
+
+    ofstream myfile;
+
+    myfile.open ("example.txt");
+
+    myfile << "Instancia numero: " << instance <<"\n";
+    myfile << "Semilla: " << seed <<"\n";
+    myfile << "Tiempo de ejecucion: " << time <<"\n";
+    myfile << "Tiempo hasta el mejor: " << timeToBest <<"\n";
+    myfile << "Numero de ejecuciones: " << seed <<"\n";
+    myfile << "Semilla: " << seed <<"\n";
+
+
+
+
+    myfile.close();
+
+//    cout << "Cantidad mínima a recoger (litros): " << endl;
+//    for (int d: this->problemInstance->qualities) {
+//        cout << d << endl;
+//    }
+//
+//    cout << "Cantidad ficticia a recoger (litros): " << endl;
+//    for (int d: this->newDemands) {
+//        cout << d << endl;
+//    }
+//
+//    cout << "Flota Camiones: " << endl;
+//    cout << "Nro. Cam.: " << this->problemInstance->trucks.size() << endl;
+//    cout << "Capacidad (litros): " << this->problemInstance->trucks[0]->getTotalCapacity() << endl;
+//
+//    cout << "Beneficio unitario ($/litro)" << endl;
+//    for (double i : this->literCost) {
+//        cout << i << endl;
+//    }
+//
+//    cout << endl << "Resultados:" << endl;
+//
+//    for(Route *r: this->routes){
+//        cout << endl << "Muestra Ruta Ordenada " << r->getId() << ":" << endl;
+//        for (Trip *t: r->trips){
+//            cout << " "<< t->finalNode->getId() << " ";
+//        }
+//    }
+//    cout << endl;
+//
+//    double totalDistance(0);
+//    for (Route *r: this->routes) {
+//        totalDistance += r->distance;
+//    }
+//
+//    vector<int> litersxtype(3, 0); //TODO a la mala el 3
+//    for (Route *r: this->routes) {
+//        int liters = this->problemInstance->trucks[r->truck->getId() - 1]->getTotalCapacity() - r->remainingCapacity;
+//        cout << liters
+//             << " litros de leche " << r->type << " llegan en Camion " << r->truck->getId() << endl;
+//        litersxtype[r->getTypeIndex()] += liters;
+//    }
+//
+//    for (int i =0 ; i < this->recollected.size(); i++) {
+//        cout << "En total llegan " << litersxtype[i] << " litros leche tipo " << i << " la planta" << endl;
+//    }
+//    this->recollected = litersxtype; // en algun momento lo calcula mal
+//
+//    vector<int> totalMilk = convertMilk(true);
+//    reverse(totalMilk.begin(), totalMilk.end());
+//
+//    double suma(0);
+//    for (int i = 0; i < totalMilk.size(); ++i) {
+//        suma += totalMilk[i] * this->literCost[i];
+//    }
+//
+//    cout << "COSTO_TPTE = " << totalDistance << endl;
+//    cout << "INGRESO_LECHE = " << to_string(suma) << endl;
+//
+//    cout << "F.O. = " << to_string(getTotalBenefit()) << endl;
+}

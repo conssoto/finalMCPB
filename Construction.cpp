@@ -68,7 +68,7 @@ void Construction::setNeighborhood(Solution *solution, bool repairing) {
         if (this->currentNode == solution->plant && !this->currentRoute->trips.empty()) {
             solution->addRoute(this->currentType);
             this->currentRoute = solution->routes.back();
-            options = getOptions(solution, solution->parameters[0]);
+            options = getOptions(solution, true);
         }
         else{
             options = getOptions(solution, true);

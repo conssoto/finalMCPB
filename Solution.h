@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+#include <fstream>
 #include <random>
 #include <numeric>
 #include <vector>
@@ -28,12 +29,12 @@ public:
     Node * plant;
     vector<double> literCost;
     double kilometerCost;
-    vector<bool> parameters;
+    unsigned int seed;
 
     double temperature;
 
 public:
-    explicit Solution(ProblemInstance *problemInstance, vector<bool> parameters);
+    explicit Solution(ProblemInstance *problemInstance, unsigned int seed);
     ~Solution();
     Solution(const Solution &s2);
 
@@ -82,5 +83,7 @@ public:
     void printAll();
     void printSolution();
     vector<int> convertMilk(bool print);
+
+    void writeSolution(int instance, unsigned int seed);
 
 };
