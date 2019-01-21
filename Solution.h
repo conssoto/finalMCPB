@@ -70,7 +70,7 @@ public:
     Truck *getNextTruck();
     double getTotalBenefit();
     int getDemandSubtraction(int dda, int prod);
-    char getType(int i);
+    char getType(int i, bool reverse);
     int getBlendingType(int currentRouteType);
 
     void removeTruck(Truck *truck);
@@ -84,6 +84,6 @@ public:
     void printSolution();
     vector<int> convertMilk(bool print);
 
-    void writeSolution(int instance, unsigned int seed);
+    void writeSolution(int instance, unsigned int seed, double timeToBest, double totalTime);
 
 };

@@ -531,19 +531,33 @@ void Solution::printAll() {
     }
 }
 
-char Solution::getType(int i){
-    if(i == 0){
-        return 'C';
-    }
-    if(i == 1){
-        return 'B';
-    }
-    if(i == 2){
-        return 'A';
+char Solution::getType(int i, bool reverse){
+    if (reverse){
+        if(i == 0){
+            return 'C';
+        }
+        if(i == 1){
+            return 'B';
+        }
+        if(i == 2){
+            return 'A';
+        }
+    }else {
+        if (i == 2) {
+            return 'C';
+        }
+        if (i == 1) {
+            return 'B';
+        }
+        if (i == 0) {
+            return 'A';
+        }
     }
 }
 
 vector<int> Solution::convertMilk(bool print) {
+    vector<int> blending;
+
     int aux(0);
     for (int i: problemInstance->qualities) {
         if (i == 0) {
@@ -556,13 +570,15 @@ vector<int> Solution::convertMilk(bool print) {
     if (aux == problemInstance->getNumberOfQualities()) { //dar vuelta
         if (print) {
             for (int i = 0; i < recollectedMilk.size(); ++i) {
-                cout << recollectedMilk[i] << " de leche " << getType(i) << " se usa como leche "
-                     << getType(i) << " en la planta" << endl;
+                blending.push_back(recollectedMilk[i]);
+                blending.push_back(i);
+                blending.push_back(i);
+//                cout << recollectedMilk[i] << " de leche " << getType(i) << " se usa como leche "
+//                     << getType(i) << " en la planta" << endl;
             }
         }
         return recollectedMilk;
     } else {
-        vector<int> inPlant;
         vector<int> dda = this->newDemands;
         vector<int> totalMilk;
 
@@ -578,8 +594,11 @@ vector<int> Solution::convertMilk(bool print) {
                         if (diff >= 0) {
                             if (i == j) {
                                 if (print) {
-                                    cout << recollectedMilk[j] << " de leche " << getType(i) << " se usa como leche "
-                                         << getType(j) << " en la planta" << endl;
+                                    blending.push_back(recollectedMilk[j]);
+                                    blending.push_back(i);
+                                    blending.push_back(j);
+//                                    cout << recollectedMilk[j] << " de leche " << getType(i) << " se usa como leche "
+//                                         << getType(j) << " en la planta" << endl;
                                 }
                                 totalMilk[j] += recollectedMilk[j];
                                 recollectedMilk[j] = 0;
@@ -587,16 +606,22 @@ vector<int> Solution::convertMilk(bool print) {
                             } else {
                                 recollectedMilk[j] -= dda[i];
                                 if (print) {
-                                    cout << dda[i] << " de leche " << getType(j) << " se usa como leche " << getType(i)
-                                         << " en la planta" << endl;
+                                    blending.push_back(dda[i]);
+                                    blending.push_back(j);
+                                    blending.push_back(i);
+//                                    cout << dda[i] << " de leche " << getType(j) << " se usa como leche " << getType(i)
+//                                         << " en la planta" << endl;
                                 }
                                 totalMilk[i] += dda[i];
                                 break;
                             }
                         } else {
                             if (print) {
-                                cout << recollectedMilk[j] << " de leche " << getType(i) << " se usa como leche "
-                                     << getType(j) << " en la planta" << endl;
+                                blending.push_back(recollectedMilk[j]);
+                                blending.push_back(i);
+                                blending.push_back(j);
+//                                cout << recollectedMilk[j] << " de leche " << getType(i) << " se usa como leche "
+//                                     << getType(j) << " en la planta" << endl;
                             }
                             totalMilk[j] += recollectedMilk[j];
                             recollectedMilk[j] -= dda[i];
@@ -608,6 +633,9 @@ vector<int> Solution::convertMilk(bool print) {
                     break;
                 }
             }
+        }
+        for(int i: blending){
+            totalMilk.push_back(i);
         }
         return totalMilk;
     }
@@ -675,81 +703,151 @@ void Solution::printSolution() {
     cout << "F.O. = " << to_string(getTotalBenefit()) << endl;
 }
 
-void Solution::writeSolution(int instance, unsigned int seed) {
+void Solution::writeSolution(int instance, unsigned int seed, double timeToBest, double totalTime) {
 
     ofstream myfile;
+    string name = "Results/resultados_i-" + to_string(instance) + "_s-" + to_string(seed) + ".txt";
+    myfile.open(name);
 
-    myfile.open ("example.txt");
+    myfile << "Instancia numero: " << instance << "\n";
+    myfile << "Semilla: " << seed << "\n";
+    myfile << "Tiempo de ejecucion: " << totalTime << " segundos\n";
+    myfile << "Tiempo hasta el mejor: " << timeToBest << " segundos\n";
+    myfile << "Numero de iteraciones: " << "2500 reset x 2000 iter" << "\n";
+    myfile << "Parámetros: " << "5, 3, 5" << "\n";
 
-    myfile << "Instancia numero: " << instance <<"\n";
-    myfile << "Semilla: " << seed <<"\n";
-    myfile << "Tiempo de ejecucion: " << time <<"\n";
-    myfile << "Tiempo hasta el mejor: " << timeToBest <<"\n";
-    myfile << "Numero de ejecuciones: " << seed <<"\n";
-    myfile << "Semilla: " << seed <<"\n";
+    myfile << "\n";
+    myfile << "\n";
+    myfile << "--> Datos de la instancia: \n";
+    int aux(0);
+    for (int i: problemInstance->qualities) {
+        if (i == 0) {
+            aux += 1;
+        }
+    }
+    myfile << "Cantidad mínima a recoger (litros): " << "\n";
+    int tMilk(0);
+    for (int d: this->problemInstance->qualities) {
+        myfile << d << endl;
+        tMilk += d;
+    }
+
+    if (aux == this->problemInstance->getNumberOfQualities()) {
+        myfile << "Cantidad ficticia a recoger (litros): " << "\n";
+        for (int d: this->newDemands) {
+            myfile << d << endl;
+        }
+    }
+    myfile << "\n";
+
+    myfile << "Nro. Cam.: " << this->problemInstance->trucks.size() << "\n";
+    myfile << "Capacidad (litros): " << this->problemInstance->trucks[0]->getTotalCapacity() << "\n";
+    myfile << "\n";
+
+    myfile << "Beneficio unitario ($/litro)" << "\n";
+    for (double i : this->literCost) {
+        myfile << i << endl;
+    }
+    myfile << "\n";
+    myfile << "\n";
+
+    myfile << "--> Resultados:\n";
+    //Resultados
+    for (Route *r: this->routes) {
+        myfile << "\n" << "Muestra Ruta Ordenada " << r->getId() << ":" << "\n";
+        for (Trip *t: r->trips) {
+            myfile << " " << t->finalNode->getId() << " ";
+        }
+    }
+    myfile << "\n";
+    myfile << "\n";
+    //Litros x camion
+    vector<int> litersxtype(3, 0); //TODO a la mala el 3
+    for (Route *r: this->routes) {
+        int liters = this->problemInstance->trucks[r->truck->getId() - 1]->getTotalCapacity() - r->remainingCapacity;
+        myfile << liters
+               << " litros de leche " << getType(r->getTypeIndex(), false) << " llegan en Camion " << r->truck->getId() << "\n";
+        litersxtype[r->getTypeIndex()] += liters;
+    }
+    myfile << "\n";
+
+    //Litros x tipo
+    for (int i = 0; i < this->recollected.size(); i++) {
+        myfile << "En total llegan " << litersxtype[i] << " litros leche tipo " << getType(i, false) << " la planta" << "\n";
+    }
+    this->recollected = litersxtype;
+    myfile << "\n";
+
+    //Milk Blending
+    vector<int> totalMilk = convertMilk(true);
+//    reverse(totalMilk.begin(), totalMilk.end());
+    double suma(0), milkRecollected(0);
+    for (int i = 0; i <= totalMilk.size()-3 ;) {
+        if (i >= this->problemInstance->getNumberOfQualities()) {
+            myfile <<  to_string(totalMilk[i]) << " de leche " << getType(totalMilk[i+1], true) << " se usa como leche "
+                   << getType(totalMilk[i + 2], true) << " en la planta" << "\n";
+            i += 3;
+        } else {
+            suma += totalMilk[i] * this->literCost[i];
+            milkRecollected += totalMilk[i];
+            ++i;
+        }
+    }
+
+    double totalDistance(0);
+    for (Route *r: this->routes) {
+        totalDistance += r->distance;
+    }
+    myfile << "\n";
+
+    myfile << "COSTO_TPTE = " << totalDistance << "\n";
+    myfile << "INGRESO_LECHE = " << to_string(suma) << "\n";
+
+    myfile << "F.O. = " << to_string(getTotalBenefit()) << "\n";
+
+    vector<double> bestFO = {750.316, 969.356, 1254.324, 1310.95, 1240.555, 604.094};
+    myfile << "Objetivo = " << bestFO[instance-1] << "\n";
+
+    myfile << "\n";
+    myfile << "Total leche Requerida = " << tMilk << "\n";
+    myfile << "Total leche Recogida = " << milkRecollected << "\n";
+
+    int totalMilkProduction(0);
+    for(Node *n: this->problemInstance->nodes){
+        totalMilkProduction += n->getProduction();
+    }
+    myfile << "Total leche Producida = " << totalMilkProduction << "\n";
+
+    myfile << "\n";
+    myfile << "\n";
+    myfile << "--> Detalle resultados:\n";
 
 
+    myfile << "# Unused trucks: " << this->unusedTrucks.size() << "\n";
+    for (Truck *t: this->unusedTrucks) {
+        myfile << "Truck: " << t->getId() << " TC: " << t->getTotalCapacity() << "\n";
+    }
+    myfile << "\n";
 
+    myfile << "# Unvisited nodes: " << this->unvisitedNodes.size() << "\n";
+    for (Node *n: this->unvisitedNodes) {
+        myfile << "Node:  " << n->getId() << "\tT: " << n->getType() << "\tP: " << n->getProduction() << "\n";
+    }
+    myfile << "\n";
+
+    for (Route *r: this->routes) {
+        myfile << "Route: " << r->getId() << "\ttruck: " << r->truck->getId() << "\tmilk type: " << r->type
+               << "\tisFull: " << r->full << "\n";
+        myfile << "Num. of trips: " << r->trips.size() << "\tremaining Capacity: " << r->remainingCapacity
+               << "\tdistance: " << r->distance << "\n";
+        for (Trip *t: r->trips) {
+            myfile << "Trip: " << t->routeId << "\t" << t->initialNode->getId() << " - "
+                   << t->finalNode->getId() << "\tT: "
+                   << t->finalNode->getType() << "\tP: " << t->finalNode->getProduction() << "\tD: "
+                   << t->distance << "\tB: " << t->benefit << "\n";
+        }
+        myfile << "\n";
+    }
 
     myfile.close();
-
-//    cout << "Cantidad mínima a recoger (litros): " << endl;
-//    for (int d: this->problemInstance->qualities) {
-//        cout << d << endl;
-//    }
-//
-//    cout << "Cantidad ficticia a recoger (litros): " << endl;
-//    for (int d: this->newDemands) {
-//        cout << d << endl;
-//    }
-//
-//    cout << "Flota Camiones: " << endl;
-//    cout << "Nro. Cam.: " << this->problemInstance->trucks.size() << endl;
-//    cout << "Capacidad (litros): " << this->problemInstance->trucks[0]->getTotalCapacity() << endl;
-//
-//    cout << "Beneficio unitario ($/litro)" << endl;
-//    for (double i : this->literCost) {
-//        cout << i << endl;
-//    }
-//
-//    cout << endl << "Resultados:" << endl;
-//
-//    for(Route *r: this->routes){
-//        cout << endl << "Muestra Ruta Ordenada " << r->getId() << ":" << endl;
-//        for (Trip *t: r->trips){
-//            cout << " "<< t->finalNode->getId() << " ";
-//        }
-//    }
-//    cout << endl;
-//
-//    double totalDistance(0);
-//    for (Route *r: this->routes) {
-//        totalDistance += r->distance;
-//    }
-//
-//    vector<int> litersxtype(3, 0); //TODO a la mala el 3
-//    for (Route *r: this->routes) {
-//        int liters = this->problemInstance->trucks[r->truck->getId() - 1]->getTotalCapacity() - r->remainingCapacity;
-//        cout << liters
-//             << " litros de leche " << r->type << " llegan en Camion " << r->truck->getId() << endl;
-//        litersxtype[r->getTypeIndex()] += liters;
-//    }
-//
-//    for (int i =0 ; i < this->recollected.size(); i++) {
-//        cout << "En total llegan " << litersxtype[i] << " litros leche tipo " << i << " la planta" << endl;
-//    }
-//    this->recollected = litersxtype; // en algun momento lo calcula mal
-//
-//    vector<int> totalMilk = convertMilk(true);
-//    reverse(totalMilk.begin(), totalMilk.end());
-//
-//    double suma(0);
-//    for (int i = 0; i < totalMilk.size(); ++i) {
-//        suma += totalMilk[i] * this->literCost[i];
-//    }
-//
-//    cout << "COSTO_TPTE = " << totalDistance << endl;
-//    cout << "INGRESO_LECHE = " << to_string(suma) << endl;
-//
-//    cout << "F.O. = " << to_string(getTotalBenefit()) << endl;
 }

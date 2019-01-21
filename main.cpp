@@ -1,6 +1,6 @@
 #include <iostream>
 #include <random>
-#include <ctime>
+#include <time.h>
 #include "ProblemInstance.h"
 #include "Solution.h"
 #include "Reader.h"
@@ -27,18 +27,17 @@ vector<int> FS_6 = {0, 22, 4, 1, 13, 0, 0, 40, 0, 0, 28, 26, 25, 20, 23, 0, 0, 1
 
 
 int main() {
+    clock_t total0, total1;
+    total0=clock();
     for(int instance = 1; instance < 7 ; ++instance){
-        double total0, total1;
-        total0=clock();
         for(unsigned int seed: SEEEDS){
-            double t0, t1;
+            clock_t t0, t1, t2, timeToBest;
 
             t0=clock();
             Reader r(to_string(instance));
             vector<int> currentList = NODES_6;
-            srand(1);
 
-
+            cout << "For instance " << instance << " seed " << seed << endl;
             ProblemInstance *problemInstance;
 
             problemInstance = r.readInputFile(100.0); // temperature
@@ -63,9 +62,8 @@ int main() {
                 }
             }
 
-
-            for (int j =0 ; j <2 ; ++j){
-                cout << "---------------------------------------------------------reset " << j << endl;
+            for (int j =0 ; j <2500 ; ++j){
+                cout << "----------------------------->Reset " << j << endl;
 
                 auto *currentSolution = new Solution(problemInstance, seed);
 
@@ -78,18 +76,18 @@ int main() {
                 construction->feasibleSolution(currentSolution);
 
                 lastSolution->resetSolution(*currentSolution);
-                //        cout<<  "initial" << currentSolution->getTotalBenefit() << endl;
-                //
-                //        cout << "***construccion**"<< endl;
-                //        for (Route *r: currentSolution->routes){
-                //            r->printAll();
-                //        }
 
+//                cout<<  "initial" << currentSolution->getTotalBenefit() << endl;
+//
+//                cout << "***construccion**"<< endl;
+//                for (Route *r: currentSolution->routes){
+//                    r->printAll();
+//                }
 
 
                 if(construction->construct){
-                    for (int i =0 ; i <21 ; ++i){
-                        //                cout << "----------------iter " << i << " for reset " << j << endl;
+                    for (int i =0 ; i <2000 ; ++i){
+//                        cout << "Iter " << i << " for reset " << j << endl;
 
                         //                currentSolution->printAll();
 
@@ -110,11 +108,14 @@ int main() {
                             if (currentSolution->getTotalBenefit() > bestSolution->getTotalBenefit()) {
                                 bestSolution->resetSolution(*currentSolution);
 
-                                //                        cout << "***mejora**"<< endl;
+                                cout << "***mejora**"<< endl;
                                 //                        for (Route *r: currentSolution->routes){
                                 //                            r->printAll();
                                 //                        }
                                 //                        cout << "new best " << bestSolution->getTotalBenefit() << endl;
+                                t2 = clock();
+                                timeToBest = ((double)(t2-t0))/CLOCKS_PER_SEC;
+
                                 better++;
                             } else {
                                 //                        cout << "***no ben**"<< endl;
@@ -148,8 +149,30 @@ int main() {
             cout << "ben " << bestSolution->getTotalBenefit() << " better " << better << endl;
             bestSolution->printAll();
 
-            bestSolution->printSolution();
-            bestSolution->writeSolution();
+            t1 = clock();
+            double ttime = ((double)(t1-t0))/CLOCKS_PER_SEC;
+            cout << "Execution Time: " << ttime << endl;
+
+//            bestSolution->printSolution();
+            bestSolution->writeSolution(instance, seed, timeToBest, ttime);
+
+
+
+            delete removeNodes;
+            delete reorderNodes;
+            delete lastSolution;
+            delete bestSolution;
+            delete problemInstance;
+
+
+        }
+        total1 = clock();
+        double totaltime = ((double)(total1-total0))/CLOCKS_PER_SEC;
+        cout << "Execution Time: " << totaltime << endl;
+    }
+    return 0;
+}
+
 
 //            cout << "better " << better << endl;
 //            cout << "fix " << fix << endl;
@@ -182,21 +205,3 @@ int main() {
             //            cout << problemInstance->distances[currentList[i]][currentList[i+1]] << endl;
             //        }
             //    }
-
-            delete removeNodes;
-            delete reorderNodes;
-            delete lastSolution;
-            delete bestSolution;
-            delete problemInstance;
-
-
-            t1 = clock();
-            double time = (t1-t0/CLOCKS_PER_SEC);
-            cout << "Execution Time: " << time << endl;
-        }
-        total1 = clock();
-        double totaltime = (total1-total0/CLOCKS_PER_SEC);
-        cout << "Execution Time: " << totaltime << endl;
-    }
-    return 0;
-}
