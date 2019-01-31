@@ -172,17 +172,22 @@ void Solution::changeDemands(){
 }
 
 double Solution::random_number(double min, double max){
-    thread_local static mt19937 mt(this->seed);
-    thread_local static uniform_real_distribution<double> dist;
-    using pick = uniform_real_distribution<double>::param_type;
-    return dist(mt, pick(min, max));
+    double f = (double)rand() / RAND_MAX;
+    double randomNumber = min + f * (max - min);
+//    thread_local static mt19937 mt(this->seed);
+//    thread_local static uniform_real_distribution<double> dist;
+//    using pick = uniform_real_distribution<double>::param_type;
+//    double randomNumber = dist(mt, pick(min, max));
+    return randomNumber;
 }
 
 int Solution::random_int_number(int min, int max){
-    thread_local static mt19937 mt(this->seed);
-    thread_local static uniform_int_distribution<int> dist;
-    using pick = uniform_int_distribution<int>::param_type;
-    return dist(mt, pick(min, max));
+    int randomNumber = rand()%(max-min + 1) + min;
+//    thread_local static mt19937 mt(this->seed);
+//    thread_local static uniform_int_distribution<int> dist;
+//    using pick = uniform_int_distribution<int>::param_type;
+//    int randomNumber = dist(mt, pick(min, max));
+    return randomNumber;
 }
 
 int Solution::getBlendingType(int currentRouteTypeIndex) {

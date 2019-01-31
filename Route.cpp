@@ -48,11 +48,9 @@ void Route::resetRouteType() {
     this->type = newType;
 }
 
-
 bool Route::fitsInTruck(Node *node){
     return this->remainingCapacity >= node->getProduction();
 }
-
 
 void Route::printAll() {
     double aux(0);

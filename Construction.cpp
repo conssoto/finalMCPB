@@ -10,6 +10,9 @@ Construction::~Construction(){
     }
     this->neighborhood.clear();
     this->neighborhood.shrink_to_fit(); //TODO borrar la ruta??
+
+    this->currentNode = nullptr;
+    this->currentRoute = nullptr;
 }
 
 void Construction::deleteNeighborhood(){
@@ -25,11 +28,10 @@ vector<Trip *> Construction::getOptions(Solution *solution,  bool resize) {
     for (int i = 0; i < solution->nodesXQuality[this->currentType - 1]; ++i) {
         Node *option = solution->unvisitedNodes[i];
         if (this->currentRoute->fitsInTruck(option)) {
-            options.push_back(solution->newTrip(this->currentNode, option,this->currentRoute));
+            options.push_back(solution->newTrip(this->currentNode, option, this->currentRoute));
         }
     }
-
-    if (resize){
+    if (resize) {
         if (options.size() > this->alpha) {
             sort(options.begin(), options.end(), sortByDistance);
             options.resize(this->alpha);
@@ -93,7 +95,7 @@ Trip *Construction::roulette(Solution *solution) {
     if (this->totalProduction == 0) { //volver a la planta
         return this->neighborhood[0];
     }
-    double beta = solution->random_number(0, 100);
+    double beta = solution->random_number(0.0, 100.0);
     double choiceProbability(0);
     for (Trip *trip: this->neighborhood) {
         if (beta > choiceProbability) {
@@ -137,19 +139,17 @@ void Construction::feasibleSolution(Solution *solution) {
     this->construct = true;
     while (solution->getUnsatisfiedType(0) != -1) {
         setNeighborhood(solution, true);
-        if(construct){
+        if (construct) {
             Trip *selectedTrip = roulette(solution);
             solution->addTrip(selectedTrip, this->currentRoute);
             solution->stepUpdateSolution(selectedTrip, this->currentRoute, true);
-        }
-        else{
+        } else {
             break;
         }
     }
-
-    for(Route *r: solution->routes){
-        if (r->trips.empty()){
-            Trip * selectedTrip = solution->newTrip(solution->plant, solution->plant, r);
+    for (Route *r: solution->routes) {
+        if (r->trips.empty()) {
+            Trip *selectedTrip = solution->newTrip(solution->plant, solution->plant, r);
             solution->addTrip(selectedTrip, r);
             solution->stepUpdateSolution(selectedTrip, r, true);
         }

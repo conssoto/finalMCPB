@@ -50,7 +50,6 @@ void RemoveNodes::setDeletable(Route *route, Solution *solution) {
 
 void RemoveNodes::breakDemands(Solution *solution) { // hasta romper alguna, no se quita en todas las rutas
 //    cout << endl << "Break Demands:" << endl;
-    this->tabuList.clear();
     bool stopCritera(false);
     int n(0);
     int stop(0);
@@ -69,7 +68,6 @@ void RemoveNodes::breakDemands(Solution *solution) { // hasta romper alguna, no 
 //                     << route->trips[deleteTripIndex]->distance << " T: "
 //                     << route->trips[deleteTripIndex]->finalNode->getType() << " from route " << route->getId() << endl;
 //                route->printAll();
-//                this->tabuList.push_back(route->trips[deleteTripIndex]->finalNode);
                 solution->updateSolution(route->trips[deleteTripIndex]->finalNode, false);
                 solution->removeTrip(deleteTripIndex, route);
                 solution->resetDemands();
@@ -84,7 +82,6 @@ void RemoveNodes::breakDemands(Solution *solution) { // hasta romper alguna, no 
 //                         << route->trips[deleteTripIndex]->finalNode->getType() << " from route " << route->getId()
 //                         << endl;
 //                    route->printAll();
-//                    this->tabuList.push_back(route->trips[deleteTripIndex]->finalNode);
                     solution->updateSolution(route->trips[deleteTripIndex]->finalNode, false);
                     solution->removeTrip(deleteTripIndex, route);
                     solution->resetDemands();

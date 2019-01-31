@@ -37,6 +37,8 @@ ProblemInstance *Reader::readInputFile(double temperature) {
     this->findDef(":=");
     this->readDistances(problemInstance);
 
+    input.close();
+
     return problemInstance;
 }
 
@@ -129,4 +131,121 @@ void Reader::readDistances(ProblemInstance *problemInstance) {
             count++;
         }
     }
+}
+
+void Reader::readOutputs(vector<unsigned int> seeds) {
+    ofstream myfile;
+    string name = "Results/resumen.txt";
+    myfile.open(name);
+
+    myfile << "Numero de iteraciones: " << "2500 reset x 2000 iter" << "\n";
+    myfile << "Numero de semillas: " << seeds.size() << "\n";
+    myfile << "Parámetros: " << "5, 3, 5" << "\n";
+    myfile << "\n";
+    myfile << "\n";
+
+
+    for (int instance = 1; instance < 7; ++instance) {
+        vector<double> timesToBest, totalTimes, FOs;
+        double objective(0);
+        for (unsigned int seed: seeds) {
+//            ifstream input2;
+            string filePath2 = "Results/resultados_i-" + to_string(instance) + "_s-" + to_string(seed) + ".txt";
+//            string filePath2= "Results/resultados_i-3_s-1505.txt";
+            input.open(filePath2);
+
+            if (!input.is_open()) {
+                cerr << "Could not open the file: " << filePath2 << std::endl;
+                exit(EXIT_FAILURE);
+            }
+
+            cout << "Reading: " << filePath2 << endl;
+
+//            string line;
+//            getline(input2, line);
+//            cout << "line: " << line << endl;
+
+            this->findDef("ejecucion:");
+            double totalTime;
+            input >> totalTime;
+            totalTimes.push_back(totalTime);
+
+            this->findDef("mejor:");
+            double timeToBest;
+            input >> timeToBest;
+            timesToBest.push_back(timeToBest);
+
+            this->findDef("F.O.");
+            this->findDef("=");
+            double FO;
+            input >> FO;
+            FOs.push_back(FO);
+
+
+            this->findDef("Objetivo");
+            this->findDef("=");
+            input >> objective;
+
+            input.close();
+        }
+
+        myfile << "\n";
+        myfile << "\n";
+        myfile << "\n";
+        myfile << "Instancia: "<< instance << "\n";
+        myfile << "\n";
+
+        double promTotalTimes(0);
+        for(double t: totalTimes) {
+            promTotalTimes += t;
+        }
+        myfile << "Tiempo total: "<< promTotalTimes << "\n";
+        myfile << "Tiempo total promedio por ejecucion: "<< promTotalTimes/totalTimes.size() << "\n";
+
+        double promTimesToBest(0);
+        for(double t: timesToBest) {
+            promTimesToBest += t;
+        }
+        myfile << "Tiempo promedio al mejor: "<< promTimesToBest/timesToBest.size() << "\n";
+        myfile << "\n";
+
+        double promFOs(0);
+        for(double t: FOs) {
+            promFOs += t;
+        }
+        myfile << "FO promedio: "<< promFOs/FOs.size() << "\n";
+        myfile << "FO maximo: " << *max_element(begin(FOs), end(FOs)) << '\n';
+        myfile << "FO minimo: " << *min_element(begin(FOs), end(FOs)) << '\n';
+        myfile << "Objetivo: " << objective << '\n';
+        myfile << "Cercania: " << 100*(*max_element(begin(FOs), end(FOs))-objective)/objective << '\n';
+        myfile << "\n";
+
+        myfile << "Todas las FOs: " << '\n';
+        for(double t: FOs) {
+            myfile << t << " ";
+        }
+        myfile << '\n';
+        myfile << '\n';
+
+        myfile << "Todos los tiempos totales: " << '\n';
+        for(double t: totalTimes) {
+            myfile << t << " ";
+        }
+        myfile << '\n';
+        myfile << '\n';
+
+        myfile << "Todos los tiempos al mejor: " << '\n';
+        for(double t: timesToBest) {
+            myfile << t << " ";
+        }
+        timesToBest.clear();
+        timesToBest.shrink_to_fit();
+
+        totalTimes.clear();
+        totalTimes.shrink_to_fit();
+
+        FOs.clear();
+        FOs.shrink_to_fit();
+    }
+    myfile << '\n';
 }

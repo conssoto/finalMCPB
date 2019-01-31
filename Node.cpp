@@ -13,7 +13,7 @@ int Node::getType() const { return this->type; }
 
 int Node::getTypeIndex() const { return this->type - 1; }
 
-void Node::printAll(){
+void Node::printAll() {
     cout << "Node:  " << this->getId() << "\tT: " << this->getType() << "\tP: " << this->getProduction() << endl;
 }
 

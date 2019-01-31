@@ -1,0 +1,125 @@
+Instancia numero: 5
+Semilla: 3795
+Tiempo de ejecucion: 606.188 segundos
+Tiempo hasta el mejor: 330 segundos
+Numero de iteraciones: 2500 reset x 2000 iter
+Parámetros: 5, 3, 5
+
+
+--> Datos de la instancia: 
+Cantidad mínima a recoger (litros): 
+10000
+70000
+10000
+
+Nro. Cam.: 5
+Capacidad (litros): 30000
+
+Beneficio unitario ($/litro)
+0.03
+0.021
+0.009
+
+
+--> Resultados:
+
+Muestra Ruta Ordenada 1:
+ 4  7  10  0 
+Muestra Ruta Ordenada 2:
+ 11  5  8  20  0 
+Muestra Ruta Ordenada 3:
+ 37  38  40  35  0 
+Muestra Ruta Ordenada 4:
+ 17  16  13  14  1  2  31  0 
+Muestra Ruta Ordenada 5:
+ 30  32  28  27  26  25  24  22  23  29  0 
+
+14431 litros de leche A llegan en Camion 5
+28494 litros de leche B llegan en Camion 4
+27391 litros de leche B llegan en Camion 2
+29437 litros de leche B llegan en Camion 3
+29021 litros de leche C llegan en Camion 1
+
+En total llegan 14431 litros leche tipo A la planta
+En total llegan 85322 litros leche tipo B la planta
+En total llegan 29021 litros leche tipo C la planta
+
+29021 de leche C se usa como leche C en la planta
+85322 de leche B se usa como leche B en la planta
+14431 de leche A se usa como leche A en la planta
+
+COSTO_TPTE = 1609
+INGRESO_LECHE = 2792.271000
+F.O. = 876.881000
+Objetivo = 1240.56
+
+Total leche Requerida = 90000
+Total leche Recogida = 128774
+Total leche Producida = 197670
+
+
+--> Detalle resultados:
+# Unused trucks: 0
+
+# Unvisited nodes: 12
+Node:  19	T: 1	P: 2470
+Node:  34	T: 1	P: 548
+Node:  15	T: 3	P: 3562
+Node:  12	T: 3	P: 4932
+Node:  9	T: 3	P: 7945
+Node:  6	T: 3	P: 5479
+Node:  3	T: 3	P: 9315
+Node:  39	T: 3	P: 20000
+Node:  18	T: 3	P: 5479
+Node:  21	T: 3	P: 4658
+Node:  36	T: 3	P: 3960
+Node:  33	T: 3	P: 548
+
+Route: 1	truck: 5	milk type: 1	isFull: 1
+Num. of trips: 4	remaining Capacity: 15569	distance: 274
+Trip: 1	0 - 4	T: 1	P: 6575	D: 133	B: 5.075
+Trip: 1	4 - 7	T: 1	P: 3288	D: 27	B: 42.048
+Trip: 1	7 - 10	T: 1	P: 4568	D: 5	B: 90.928
+Trip: 1	10 - 0	T: 0	P: 0	D: 109	B: -109
+
+Route: 2	truck: 4	milk type: 2	isFull: 1
+Num. of trips: 5	remaining Capacity: 1506	distance: 325
+Trip: 2	0 - 11	T: 2	P: 7671	D: 94	B: 67.091
+Trip: 2	11 - 5	T: 2	P: 4932	D: 42	B: 61.572
+Trip: 2	5 - 8	T: 2	P: 2192	D: 16	B: 30.032
+Trip: 2	8 - 20	T: 2	P: 13699	D: 99	B: 188.679
+Trip: 2	20 - 0	T: 0	P: 0	D: 74	B: -74
+
+Route: 3	truck: 2	milk type: 2	isFull: 1
+Num. of trips: 5	remaining Capacity: 2609	distance: 544
+Trip: 3	0 - 37	T: 1	P: 791	D: 86	B: -69.389
+Trip: 3	37 - 38	T: 2	P: 2000	D: 17	B: 25
+Trip: 3	38 - 40	T: 1	P: 20000	D: 189	B: 231
+Trip: 3	40 - 35	T: 2	P: 4600	D: 217	B: -120.4
+Trip: 3	35 - 0	T: 0	P: 0	D: 35	B: -35
+
+Route: 4	truck: 3	milk type: 2	isFull: 1
+Num. of trips: 8	remaining Capacity: 563	distance: 296
+Trip: 4	0 - 17	T: 2	P: 7397	D: 102	B: 53.337
+Trip: 4	17 - 16	T: 1	P: 4384	D: 27	B: 65.064
+Trip: 4	16 - 13	T: 1	P: 4795	D: 23	B: 77.695
+Trip: 4	13 - 14	T: 2	P: 2740	D: 8	B: 49.54
+Trip: 4	14 - 1	T: 1	P: 6438	D: 86	B: 49.198
+Trip: 4	1 - 2	T: 2	P: 2658	D: 8	B: 47.818
+Trip: 4	2 - 31	T: 1	P: 1025	D: 24	B: -2.475
+Trip: 4	31 - 0	T: 0	P: 0	D: 18	B: -18
+
+Route: 5	truck: 1	milk type: 3	isFull: 1
+Num. of trips: 11	remaining Capacity: 979	distance: 170
+Trip: 5	0 - 30	T: 3	P: 2208	D: 14	B: 5.872
+Trip: 5	30 - 32	T: 2	P: 4658	D: 19	B: 22.922
+Trip: 5	32 - 28	T: 1	P: 1260	D: 30	B: -18.66
+Trip: 5	28 - 27	T: 3	P: 10959	D: 14	B: 84.631
+Trip: 5	27 - 26	T: 2	P: 497	D: 15	B: -10.527
+Trip: 5	26 - 25	T: 1	P: 2899	D: 14	B: 12.091
+Trip: 5	25 - 24	T: 3	P: 481	D: 10	B: -5.671
+Trip: 5	24 - 22	T: 1	P: 2192	D: 13	B: 6.728
+Trip: 5	22 - 23	T: 2	P: 1472	D: 8	B: 5.248
+Trip: 5	23 - 29	T: 2	P: 2395	D: 32	B: -10.445
+Trip: 5	29 - 0	T: 0	P: 0	D: 1	B: -1
+

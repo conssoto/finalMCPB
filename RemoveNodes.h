@@ -14,7 +14,6 @@ public:
     vector<int> deletableTripsIndex;
     vector<double> benefits;
     double totalBenefit;
-    vector<Node *> tabuList;
 
 public:
     explicit RemoveNodes();

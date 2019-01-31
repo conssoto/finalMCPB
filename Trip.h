@@ -27,4 +27,3 @@ public:
 
 bool sortByDistance(const Trip *t1, const Trip *t2);
 bool sortByBenefit(const Trip *t1, const Trip *t2);
-
