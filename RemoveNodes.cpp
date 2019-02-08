@@ -106,25 +106,21 @@ void RemoveNodes::breakDemands(Solution *solution) { // hasta romper alguna, no 
 
 void RemoveNodes::movement(Solution *solution) {
 //    cout << endl <<"RemoveNodes:" << endl;
-
     for (Route *route: solution->routes) {
         if ((int) route->trips.size() > 2) { // no dejar la ruta vacia, todos loscami
             bool stopCritera(false);
             while (!stopCritera) { // mientras tenga nodos que sacar, saca
-                setDeletable(route, solution); //si no esta vacio
-                if (!this->benefits.empty()) {
+                setDeletable(route, solution);
+                if (!this->benefits.empty()) {//si no esta vacio
                     int selectedIndex = roulette(solution);
                     int deleteIndex(this->deletableTripsIndex[selectedIndex]);
-//                    cout << "->deleted node " << route->trips[deleteIndex]->finalNode->getId() << " P: "
-//                         << route->trips[deleteIndex]->finalNode->getProduction() << " D: "
-//                         << route->trips[deleteIndex]->distance << " T: " << route->trips[deleteIndex]->finalNode->getType()
-//                         << " from route " << route->getId()
-//                         << endl;
-//                route->printAll();
                     solution->updateSolution(route->trips[deleteIndex]->finalNode, false);
                     solution->removeTrip(deleteIndex, route);
                     solution->resetDemands();
                 } else {
+                    stopCritera = true;
+                }
+                if((int) route->trips.size() > 2){
                     stopCritera = true;
                 }
             }

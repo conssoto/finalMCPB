@@ -424,10 +424,10 @@ void Solution::resetDemands() {
         int routeProd(0);
         for (Trip *trip: route->trips){
             routeProd += trip->finalNode->getProduction();
-            if (type < trip->finalNode->getType()){
+            if (type < trip->finalNode->getType()){ // la ruta es del tipo mas grande
                 type = trip->finalNode->getType();
             }
-            this->recollected[trip->finalNode->getTypeIndex()] += trip->finalNode->getProduction();
+            this->recollected[trip->finalNode->getTypeIndex()] += trip->finalNode->getProduction(); //recollected segun nodo
         }
         int subtracting = routeProd;
         for (int i = type-1; i < this->unsatisfiedDemand.size(); ++i) {
@@ -453,11 +453,11 @@ void Solution::resetRouteFull() {
 void Solution::updateSolution(Node *node, bool add) {
     if(add){
         removeNode(node);
-        this->recollected[node->getTypeIndex()] += node->getProduction();
+        this->recollected[node->getTypeIndex()] += node->getProduction(); //TODO inecesario en reset demands se actualiza
     }
     else{
         insertNode(node);
-        this->recollected[node->getTypeIndex()] -= node->getProduction();
+        this->recollected[node->getTypeIndex()] -= node->getProduction(); //TODO inecesario en reset demands se actualiza
 
     }
     resetDemands();

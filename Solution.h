@@ -13,7 +13,7 @@ using namespace std;
 
 class Solution {
 public:
-    vector<int> recollected; //x type
+    vector<int> recollected; //x type nodo
     vector<int> unsatisfiedDemand;
     vector<int> newDemands;
 

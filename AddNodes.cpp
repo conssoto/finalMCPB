@@ -76,10 +76,11 @@ void AddNodes::changeRouteType(Route *route, Solution *solution){ //node adding 
 void AddNodes::nodeAdding(Route *route, Solution *solution) {
     int noadd(0);
     while (!route->isFull()) { // agrega nodos mientras existan vecinos.
-        if(route->trips.size()==1){
-            changeRouteType(route, solution); //cambia el tipo de ruta
-            route->full = false;
-        }
+//        if(route->trips.size()==1){
+//            cout << "NUEVO TIPO " << route->type << " para " << route->id << endl;
+//            changeRouteType(route, solution); //cambia el tipo de ruta
+//            route->full = false;
+//        }
         Trip *selectedPlace = roulette(route, solution);
         Trip *selectedTrip = getBestOption(selectedPlace, route, solution);
         double delta = selectedTrip->benefit; //TODO considera la mejor opcion de leche -la del camion, no lo que realmente sera tras el blending
