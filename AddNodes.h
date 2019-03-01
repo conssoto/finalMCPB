@@ -30,6 +30,6 @@ public:
 
     void deleteOptions(vector<Trip *> options);
 
-    void nodeAdding(Route *route, Solution *solution);
-    void movement(Solution *solution);
+    void nodeAdding(Route *route, Solution *solution, int epsilon);
+    void movement(Solution *solution, int epsilon);
 };

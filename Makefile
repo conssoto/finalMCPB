@@ -13,4 +13,5 @@ clean:
 	rm -f MCPB *.o
 
 exe:
-	@./MCPB
+	@./MCPB ${ARGS}
+

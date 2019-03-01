@@ -26,6 +26,6 @@ public:
     double getDeletableBenefit(Trip *deletableTrip, Trip *nextTrip, Route *route, Solution *solution);
 
     int roulette(Solution *solution);
-    void breakDemands(Solution *solution);
+    void breakDemands(Solution *solution, int gamma);
     void movement(Solution *solution);
 };

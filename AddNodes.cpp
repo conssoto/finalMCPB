@@ -73,7 +73,7 @@ void AddNodes::changeRouteType(Route *route, Solution *solution){ //node adding 
 }
 
 
-void AddNodes::nodeAdding(Route *route, Solution *solution) {
+void AddNodes::nodeAdding(Route *route, Solution *solution, int epsilon) {
     int noadd(0);
     while (!route->isFull()) { // agrega nodos mientras existan vecinos.
 //        if(route->trips.size()==1){
@@ -107,7 +107,7 @@ void AddNodes::nodeAdding(Route *route, Solution *solution) {
 
             } else {
                 noadd++;
-                if(noadd > route->trips.size()*5){ // resetea luego de no pillar nada que agrear
+                if(noadd > route->trips.size()*epsilon){ // resetea luego de no pillar nada que agrear
                     solution->temperature = solution->problemInstance->temperature; // reset temperature.
                 }
 //                cout << "no se agrega nada" << endl;
@@ -126,7 +126,7 @@ void AddNodes::nodeAdding(Route *route, Solution *solution) {
 }
 
 
-void AddNodes::movement(Solution *solution) {
+void AddNodes::movement(Solution *solution, int epsilon) {
 //    cout << endl << "AddNodes:" << endl;
     this->fix = true;
     this->currentRoute = nullptr;
@@ -138,7 +138,7 @@ void AddNodes::movement(Solution *solution) {
         this->stopCriteria = false;
     }
     while(!this->stopCriteria){
-        nodeAdding(this->currentRoute, solution);
+        nodeAdding(this->currentRoute, solution, epsilon);
     }
     if (solution->getUnsatisfiedType(0) != -1) {
         this->fix = false;

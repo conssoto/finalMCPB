@@ -48,7 +48,7 @@ void RemoveNodes::setDeletable(Route *route, Solution *solution) {
     }
 }
 
-void RemoveNodes::breakDemands(Solution *solution) { // hasta romper alguna, no se quita en todas las rutas
+void RemoveNodes::breakDemands(Solution *solution, int gamma) { // hasta romper alguna, no se quita en todas las rutas
 //    cout << endl << "Break Demands:" << endl;
     bool stopCritera(false);
     int n(0);
@@ -90,7 +90,7 @@ void RemoveNodes::breakDemands(Solution *solution) { // hasta romper alguna, no 
                 }
             }
             for (int d: solution->unsatisfiedDemand) { //si rompe alguna, para.
-                if (d > 0 and n >= 3) { // <- elimine tres al menos! or (n >= solution->routes.size()*2)
+                if (d > 0 and n >= gamma) { // <- elimine tres al menos! or (n >= solution->routes.size()*2)
                     stopCritera = true;
                 }
             }

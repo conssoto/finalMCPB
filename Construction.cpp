@@ -40,7 +40,7 @@ vector<Trip *> Construction::getOptions(Solution *solution,  bool resize) {
     return options;
 }
 
-void Construction::setNeighborhood(Solution *solution, bool repairing) {
+void Construction::setNeighborhood(Solution *solution, bool repairing, bool corte) {
     vector<Trip *> options;
     if (repairing){
         vector<Route *> unfilledRoutes(solution->getUnfilledRoutes());
@@ -70,7 +70,7 @@ void Construction::setNeighborhood(Solution *solution, bool repairing) {
         if (this->currentNode == solution->plant && !this->currentRoute->trips.empty()) {
             solution->addRoute(this->currentType);
             this->currentRoute = solution->routes.back();
-            options = getOptions(solution, true);
+            options = getOptions(solution, corte); //primer nodo true con corte
         }
         else{
             options = getOptions(solution, true);
@@ -118,12 +118,12 @@ void Construction::updateIds(vector<Route *> routes){ // TODO para que se usan?
     }
 }
 
-void Construction::feasibleSolution(Solution *solution) {
+void Construction::feasibleSolution(Solution *solution, bool corte) {
     /// Fase 1: agregar nodo favoreciendo producion dentro de los mas cercanos.
 //    cout << endl << "----FASE 1----" << endl;
 
     while (solution->getUnsatisfiedType(0) != -1) {
-        setNeighborhood(solution, false);
+        setNeighborhood(solution, false, corte);
         Trip *selectedTrip = roulette(solution);
         solution->addTrip(selectedTrip, this->currentRoute);
         solution->stepUpdateSolution(selectedTrip, this->currentRoute, false);
@@ -138,7 +138,7 @@ void Construction::feasibleSolution(Solution *solution) {
 //    cout << endl <<  " -----FASE 2-----" << endl;
     this->construct = true;
     while (solution->getUnsatisfiedType(0) != -1) {
-        setNeighborhood(solution, true);
+        setNeighborhood(solution, true, corte);
         if (construct) {
             Trip *selectedTrip = roulette(solution);
             solution->addTrip(selectedTrip, this->currentRoute);
