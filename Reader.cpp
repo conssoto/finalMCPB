@@ -133,14 +133,15 @@ void Reader::readDistances(ProblemInstance *problemInstance) {
     }
 }
 
-void Reader::readOutputs(vector<unsigned int> seeds) {
+void Reader::readOutputs(vector<unsigned int> seeds, size_t beta, int gamma, int epsilon, bool corte) {
     ofstream myfile;
     string name = "Results/resumen.txt";
     myfile.open(name);
 
     myfile << "Numero de iteraciones: " << "2500 reset x 2000 iter" << "\n";
     myfile << "Numero de semillas: " << seeds.size() << "\n";
-    myfile << "Parámetros: " << "5, 3, 5" << "\n";
+    myfile << "Parámetros: " <<  beta << "," << gamma << "," << epsilon << "\n";
+    myfile << "Corte: " << corte << "\n";
     myfile << "\n";
     myfile << "\n";
 

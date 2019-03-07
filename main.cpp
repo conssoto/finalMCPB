@@ -26,10 +26,9 @@ bool CORTE = true;
 vector<unsigned int> SEEEDS = {1008, 1505, 494, 15, 937, 1801, 522, 7, 24, 116, 9574, 7121, 803, 347, 3795, 672, 49, 2647, 223, 236}; // {cut Neighborhood}
 
 int main(int argc, char *argv[]) {
-
     if(not argv[2]){
         Reader r(to_string(3));
-        r.readOutputs(SEEEDS);
+        r.readOutputs(SEEEDS, BETA, GAMMA, EPSILON, CORTE);
     }
     else{
         int instance(atoi(argv[1]));
@@ -93,8 +92,6 @@ int main(int argc, char *argv[]) {
             lastSolution->resetSolution(*currentSolution);
 
             cout << "***construccion**" << endl;
-
-            cout <<construction->construct << endl;
 
             if (construction->construct) {
                 for (int i = 0; i < 2500; ++i) {

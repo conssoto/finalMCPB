@@ -20,7 +20,7 @@ public:
     ~Reader();
 
     ProblemInstance *readInputFile(double temperature);
-    void readOutputs(vector<unsigned int> seeds);
+    void readOutputs(vector<unsigned int> seeds, size_t beta, int gamma, int epsilon, bool corte);
 
 private:
     void findDef(string def);
